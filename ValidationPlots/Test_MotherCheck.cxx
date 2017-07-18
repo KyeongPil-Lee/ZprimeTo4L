@@ -25,6 +25,7 @@
 void PrintAll_GenParticle(TClonesArray *Br_GenParticle )
 {
 	Int_t nGenParticle = Br_GenParticle->GetEntriesFast();
+	cout << "[nGenParticle = " << nGenParticle << "]" << endl;
 	for(Int_t i_gen=0; i_gen<nGenParticle; i_gen++)
 	{
 		GenParticle* GenPar = (GenParticle*)Br_GenParticle->At(i_gen);
