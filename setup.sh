@@ -17,5 +17,6 @@ cd $KP_ANALYZER_PATH
 export KP_MADGRAPH_PATH="/home/kplee/Physics/Madgraph/MG5_aMC_v2_5_5"
 export KP_DELPHES_PATH="/home/kplee/Physics/Delphes/Delphes-3.4.1"
 export KP_DELPHESDATA_PATH="/data7/Users/kplee/Delphes"
+export KP_DATA_PATH="/data7/Users/kplee"
 
 echo "Setup for Z'->4l analysis is finished"
