@@ -564,8 +564,8 @@ public:
 						vec_GenMu.push_back( GenPar );
 				}
 				
-				MyGenPair *GenPair_Phi = new MyGenPair( GenPar[0],GenPar[1] );
-				MyGenPair *GenPair_AntiPhi = new MyGenPair( GenPar[2],GenPar[3] );
+				MyGenPair *GenPair_Phi = new MyGenPair( vec_GenMu[0],vec_GenMu[1] );
+				MyGenPair *GenPair_AntiPhi = new MyGenPair( vec_GenMu[2],vec_GenMu[3] );
 				Hists->Fill_GEN( GenPair_Phi, GenPair_AntiPhi );
 
 
