@@ -36,7 +36,8 @@ void PrintAll_GenParticle(TClonesArray *Br_GenParticle )
 void Test_MotherCheck()
 {
 	TString DataPath = gSystem->Getenv("KP_DATA_PATH");
-	TString InputFileName = DataPath+"/Delphes/ZZTo4mu_10k.root";
+	// TString InputFileName = DataPath+"/Delphes/ZZTo4mu_10k.root";
+	TString InputFileName = DataPath+"/Delphes/ZZTo4mu_10k_BeforeHadronization.root";
 
 	TChain* chain = new TChain("Delphes");
 	chain->Add(InputFileName);
