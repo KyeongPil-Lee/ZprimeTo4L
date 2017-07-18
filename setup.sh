@@ -9,8 +9,9 @@ export KP_ANALYZER_PATH=$(pwd)
 
 # -- cms1.snu.ac.kr -- #
 export SCRAM_ARCH=slc6_amd64_gcc530
-source /cvmfs/cms.cern.ch/cmsset_default.sh
-cd /cvmfs/cms.cern.ch/slc6_amd64_gcc530/cms/cmssw/CMSSW_8_0_25
+export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
+source $VO_CMS_SW_DIR/cmsset_default.sh
+cd $VO_CMS_SW_DIR/slc6_amd64_gcc530/cms/cmssw/CMSSW_8_0_25
 eval `scramv1 runtime -sh`
 cd $KP_ANALYZER_PATH
 
