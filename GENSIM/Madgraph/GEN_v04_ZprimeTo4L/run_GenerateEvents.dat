@@ -1,6 +1,5 @@
 set nb_core 3
 launch
-order=NLO
 shower=ON
 done #determine which operations are executed: NLO, fixed order ...
 
