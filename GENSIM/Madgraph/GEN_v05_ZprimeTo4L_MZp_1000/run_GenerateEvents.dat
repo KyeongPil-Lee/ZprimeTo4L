@@ -4,18 +4,18 @@ generate_events
 	shower=PYTHIA8
 	set MZp 1000
 	set Msn3 10
-	set nevent 100
+	set nevents 100
 
 generate_events
 	shower=PYTHIA8
 	set MZp 1000
 	set Msn3 50
-	set nevent 100
+	set nevents 100
 
 generate_events
 	shower=PYTHIA8
 	set MZp 1000
 	set Msn3 300
-	set nevent 100
+	set nevents 100
 
 
