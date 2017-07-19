@@ -23,4 +23,3 @@ generate_events
 	set MZp 2000
 	set Msn3 600
 	set nevents 200000
-
