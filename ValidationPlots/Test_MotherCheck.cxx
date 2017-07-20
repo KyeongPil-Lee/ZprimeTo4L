@@ -37,8 +37,8 @@ void PrintAll_GenParticle(TClonesArray *Br_GenParticle )
 void Test_MotherCheck()
 {
 	TString DataPath = gSystem->Getenv("KP_DATA_PATH");
-	// TString InputFileName = DataPath+"/Delphes/ZZTo4mu_10k.root";
-	TString InputFileName = DataPath+"/Delphes/ZZTo4mu_10k_BeforeHadronization.root";
+	TString InputFileName = DataPath+"/Delphes/ZZTo4mu_10k.root";
+	// TString InputFileName = DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/ZZto4L0j_200k.root";
 
 	TChain* chain = new TChain("Delphes");
 	chain->Add(InputFileName);
@@ -60,22 +60,31 @@ void Test_MotherCheck()
 	{
 		treeReader->ReadEntry(i_ev);
 
-		PrintAll_GenParticle( Br_GenParticle );
+		// PrintAll_GenParticle( Br_GenParticle );
 
-		// Int_t nGenParticle = Br_GenParticle->GetEntriesFast();
-		// for(Int_t i_gen=0; i_gen<nGenParticle; i_gen++)
-		// {
-		// 	GenParticle* GenPar = (GenParticle*)Br_GenParticle->At(i_gen);
+		Int_t nGenParticle = Br_GenParticle->GetEntriesFast();
+		Int_t nMuon_FinalState = 0;
+		for(Int_t i_gen=0; i_gen<nGenParticle; i_gen++)
+		{
+			GenParticle* GenPar = (GenParticle*)Br_GenParticle->At(i_gen);
+
+			if( GenPar->Status == 1 && fabs(GenPar->ID) == 13)
+				nMuon_FinalState++;
 			
-		// 	if( GenPar->Status == 1 ) // -- final state letpons  -- //
-		// 	{
-		// 		Int_t MotherID = this->GetMotherID( GenPar, Br_GenParticle );
-		// 		if( MotherID == 1000600 )
-		// 			vec_GenLepFromPhi.push_back( GenPar );
-		// 		else if( MotherID == -1000600 )
-		// 			vec_GenLepFromAntiPhi.push_back( GenPar );
-		// 	}
-		// }
+			if( GenPar->Status == 1 ) // -- final state letpons  -- //
+			{
+				Int_t MotherID = this->GetMotherID( GenPar, Br_GenParticle );
+				if( MotherID == 1000600 )
+					vec_GenLepFromPhi.push_back( GenPar );
+				else if( MotherID == -1000600 )
+					vec_GenLepFromAntiPhi.push_back( GenPar );
+			}
+		}
+
+		cout << "nMuon_FinalState: " << nMuon_FinalState << endl;
+		if( nMuon_FinalState != 4 )
+			cout << "\t WARNING! # muons in final state is NOT 4!!" << endl;
+
 
 		// MyGenPair *GenPair_Phi = new MyGenPair( vec_GenLepFromPhi[0],vec_GenLepFromPhi[1] );
 		// MyGenPair *GenPair_AntiPhi = new MyGenPair( vec_GenLepFromAntiPhi[0],vec_GenLepFromAntiPhi[1] );
