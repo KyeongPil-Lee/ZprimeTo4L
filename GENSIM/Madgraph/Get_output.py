@@ -26,10 +26,10 @@ for MZp in List_MZp:
 
 for MZp in List_MZp:
 	for Msn3 in Scenarios_Msn3[MZp]:
-		OutputName = "MZp_%s_Msn3_%s_200k.hepmc" % (MZp, Msn3)
+		OutputName = "MZp_%s_Msn3_%s_200k.hepmc.gz" % (MZp, Msn3)
 		List_OutputNames[ DirNames[MZp] ].append( OutputName )
 
-
+List_Path_Output = []
 List_CMD = []
 for DirName in List_OutputNames.keys():
 	print "DirName: ", DirName
@@ -43,9 +43,9 @@ for DirName in List_OutputNames.keys():
 		InputName = ""
 		for File in List_File:
 			if ".hepmc" in File:
-				if InputName = "":
+				if InputName == "":
 					InputName = File
-				else
+				else:
 					print "More than 2 .hepmc file! ... %s and %s" % (InputName, File)
 					sys.exit()
 
@@ -54,6 +54,7 @@ for DirName in List_OutputNames.keys():
 		print "\t\t", Path_Input
 
 		Path_Output = "%s/%s" % (BasePath_Output, OutputName)
+		List_Path_Output.append( Path_Output )
 
 		print "\t\t", Path_Output
 
@@ -67,6 +68,12 @@ f.write( "#!bin/bash\n" )
 for CMD in List_CMD:
 	f.write( CMD )
 	f.write( "\n" )
+f.write("\n")
+
+for Path_Output in List_Path_Output:
+	f.write( "gunzip %s" % Path_Output )
+	f.write( "\n" )
+f.write("\n")
 
 f.write( 'echo "finished"' )
 f.close()
