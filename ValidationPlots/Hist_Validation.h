@@ -521,10 +521,17 @@ class Analyzer
 {
 public:
 	TString InputFileName;
+	Bool_t Flag_IsSignal;
 
 	Analyzer( TString _InputFileName )
 	{
 		this->InputFileName = _InputFileName;
+		Flag_IsSignal = kFALSE; // -- initial value -- //
+	}
+
+	void IsSignal( Bool_t flag )
+	{
+		this->Flag_IsSignal = flag;
 	}
 
 	void Analyze()
@@ -627,24 +634,49 @@ public:
 		Int_t nGenParticle = Br_GenParticle->GetEntriesFast();
 		Int_t nGenMuon = 0;
 		Int_t nGenElectron = 0;
-		for(Int_t i_gen=0; i_gen<nGenParticle; i_gen++)
-		{
-			GenParticle* GenPar = (GenParticle*)Br_GenParticle->At(i_gen);
-			
-			if( GenPar->Status == 1 ) // -- final state letpons  -- //
-			{
-				Int_t MotherID = this->GetMotherID( GenPar, Br_GenParticle );
-				// cout << "MotherID: " << MotherID << endl;
 
-				if( fabs(MotherID) == 1000600 ) // -- from intermediate particle -- //
+		if( this->Flag_IsSignal )
+		{
+			for(Int_t i_gen=0; i_gen<nGenParticle; i_gen++)
+			{
+				GenParticle* GenPar = (GenParticle*)Br_GenParticle->At(i_gen);
+				
+				if( GenPar->Status == 1 ) // -- final state letpons  -- //
 				{
-					if( fabs(GenPar->PID) == 13)
-						nGenMuon++;
-					else if( fabs(GenPar->PID) == 11 )
-						nGenElectron++;
+					Int_t MotherID = this->GetMotherID( GenPar, Br_GenParticle );
+					// cout << "MotherID: " << MotherID << endl;
+
+					if( fabs(MotherID) == 1000600 ) // -- from intermediate particle -- //
+					{
+						if( fabs(GenPar->PID) == 13)
+							nGenMuon++;
+						else if( fabs(GenPar->PID) == 11 )
+							nGenElectron++;
+					}
 				}
 			}
 		}
+		else // -- if ZZ->4l -- //
+		{
+			for(Int_t i_gen=0; i_gen<nGenParticle; i_gen++)
+			{
+				GenParticle* GenPar = (GenParticle*)Br_GenParticle->At(i_gen);
+				
+				if( GenPar->Status == 1 ) // -- final state letpons  -- //
+				{
+					Int_t MotherID = this->GetMotherID( GenPar, Br_GenParticle );
+					if( fabs(MotherID) == 23 || GenPar->PID == MotherID )
+					{
+						if( fabs(GenPar->PID) == 13)
+							nGenMuon++;
+						else if( fabs(GenPar->PID) == 11 )
+							nGenElectron++;
+					}
+
+				}
+			}
+		}
+
 
 		if( nGenElectron == 4 && nGenMuon == 0 ) TStr_Channel = "4e";
 		else if( nGenElectron == 3 && nGenMuon == 1 ) TStr_Channel = "3e1m";
