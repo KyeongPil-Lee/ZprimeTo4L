@@ -22,6 +22,8 @@
 #include "classes/DelphesClasses.h"
 #include "external/ExRootAnalysis/ExRootTreeReader.h"
 
+#include "HistTools.h"
+
 Bool_t CompareGenParticle( GenParticle* Object1, GenParticle* Object2 )
 {
 	return Object1->PT > Object2->PT;
@@ -82,6 +84,9 @@ public:
 	Double_t Rap;
 	TLorentzVector LVec_P;
 
+	MyGenPair* GENPair_postFSR;
+
+
 	MyMuonPair( Muon* mu1, Muon* mu2 )
 	{
 		if( mu1->PT > mu2->PT )
@@ -107,6 +112,11 @@ public:
 		this->M = this->LVec_P.M();
 		this->Pt = this->LVec_P.Pt();
 		this->Rap = this->LVec_P.Rapidity();
+
+		// -- matched Gen-pair @ post-FSR level (final state) -- //
+		GenParticle* GenMu1 = (GenParticle*)this->First->Particle.GetObject();
+		GenParticle* GenMu2 = (GenParticle*)this->Second->Particle.GetObject();
+		this->GENPair_postFSR = new MyGenPair( GenMu1, GenMu2 );
 	}
 };
 
@@ -163,6 +173,7 @@ public:
 	TH1D* h_Pt;
 	TH1D* h_Rap;
 	TH1D* h_Mass;
+	TH1D* h_RelDiff_Mass;
 
 	FourMuonHistContainer(TString _Type)
 	{
@@ -178,9 +189,13 @@ public:
 		Double_t Rap = LVec_P_4Lep.Rapidity();
 		Double_t Mass = LVec_P_4Lep.M();
 
+		Double_t Mass_GEN = (MuonPair1->GENPair_postFSR->LVec_P + MuonPair2->GENPair_postFSR->LVec_P).M();
+		Double_t RelDiff_Mass = (Mass - Mass_GEN) / Mass_GEN;
+
 		this->h_Pt->Fill( Pt, weight );
 		this->h_Rap->Fill( Rap, weight );
 		this->h_Mass->Fill( Mass, weight );
+		this->h_RelDiff_Mass->Fill( RelDiff_Mass, weight );
 	}
 
 	void Save( TFile *f_output )
@@ -190,6 +205,7 @@ public:
 		this->h_Pt->Write();
 		this->h_Rap->Write();
 		this->h_Mass->Write();
+		this->h_RelDiff_Mass->Write();
 	}
 
 	void Init_Hist()
@@ -197,6 +213,7 @@ public:
 		this->h_Pt = new TH1D("h_Pt_4Muon_"+this->Type, "", 10000, 0, 10000);
 		this->h_Rap = new TH1D("h_Rap_4Muon_"+this->Type, "", 200, -10, 10);
 		this->h_Mass = new TH1D("h_Mass_4Muon_"+this->Type, "", 80, -4, 4);
+		this->h_RelDiff_Mass = new TH1D("h_RelDiff_Mass_4Muon_"+this->Type, "", 1000, -1, 1);
 	}
 };
 
@@ -251,6 +268,7 @@ public:
 	TH1D* h_Pt;
 	TH1D* h_Rap;
 	TH1D* h_Mass;
+	TH1D* h_RelDiff_Mass;
 
 	MuonPairHistContainer(TString _Type)
 	{
@@ -264,9 +282,13 @@ public:
 		Double_t Rap = MuonPair->Rap;
 		Double_t Mass = MuonPair->M;
 
+		Double_t Mass_GEN = MuonPair->GENPair_postFSR->M;
+		Double_t RelDiff_Mass = (Mass - Mass_GEN ) / Mass_GEN; // -- difference with "post-FSR" gen-mass -- //
+
 		this->h_Pt->Fill( Pt, weight );
 		this->h_Rap->Fill( Rap, weight );
 		this->h_Mass->Fill( Mass, weight );
+		this->h_RelDiff_Mass->Fill( RelDiff_Mass, weight );
 	}
 
 	void Save( TFile *f_output )
@@ -276,6 +298,7 @@ public:
 		this->h_Pt->Write();
 		this->h_Rap->Write();
 		this->h_Mass->Write();
+		this->h_RelDiff_Mass->Write();
 	}
 
 	void Init_Hist()
@@ -283,6 +306,7 @@ public:
 		this->h_Pt = new TH1D("h_Pt_2Muon_"+this->Type, "", 10000, 0, 10000);
 		this->h_Rap = new TH1D("h_Rap_2Muon_"+this->Type, "", 200, -10, 10);
 		this->h_Mass = new TH1D("h_Mass_2Muon_"+this->Type, "", 80, -4, 4);
+		this->h_RelDiff_Mass = new TH1D("h_RelDiff_Mass_2Muon_"+this->Type, "", 1000, -1, 1);
 	}
 };
 
@@ -421,22 +445,25 @@ public:
 	GenLepHistContainer *GenMuHist_3rd;
 	GenLepHistContainer *GenMuHist_4th;
 
+	GenLepPairHistContainer* GenPairHist_All;
+	// GenLepPairHistContainer* GenPairHist_Phi;
+	// GenLepPairHistContainer* GenPairHist_AntiPhi;
+	FourGenLepHistContainer* FourGenLepHist;
+
+
+
 	SingleMuHistContainer* SingleMuHist_All;
 	SingleMuHistContainer* SingleMuHist_1st;
 	SingleMuHistContainer* SingleMuHist_2nd;
 	SingleMuHistContainer* SingleMuHist_3rd;
 	SingleMuHistContainer* SingleMuHist_4th;
 
-	// GenLepPairHistContainer* GenPairHist_All;
-	// GenLepPairHistContainer* GenPairHist_Phi;
-	// GenLepPairHistContainer* GenPairHist_AntiPhi;
 
-	// MuonPairHistContainer* MuonPairHist_All;
+	MuonPairHistContainer* MuonPairHist_All;
 	// MuonPairHistContainer* MuonPairHist_Phi;
 	// MuonPairHistContainer* MuonPairHist_AntiPhi;
 
-	// FourGenLepHistContainer* FourGenLepHist;
-	// FourMuonHistContainer* FourMuonHist;
+	FourMuonHistContainer* FourMuonHist;
 
 	HistContainer()
 	{
@@ -461,6 +488,11 @@ public:
 		GenMuHist_2nd->Fill( vec_GenMu[1] );
 		GenMuHist_3rd->Fill( vec_GenMu[2] );
 		GenMuHist_4th->Fill( vec_GenMu[3] );
+
+		GenPairHist_All->Fill( Pair_Phi );
+		GenPairHist_All->Fill( Pair_AntiPhi );
+
+		FourGenLepHist->Fill( Pair_Phi, Pair_AntiPhi );
 	}
 
 
@@ -482,6 +514,11 @@ public:
 		SingleMuHist_2nd->Fill( vec_Muon[1] );
 		SingleMuHist_3rd->Fill( vec_Muon[2] );
 		SingleMuHist_4th->Fill( vec_Muon[3] );
+
+		MuonPairHist_All->Fill( Pair_Phi );
+		MuonPairHist_All->Fill( Pair_AntiPhi );
+
+		FourMuonHist->Fill( Pair_Phi, Pair_AntiPhi );
 	}
 
 	void Save( TFile *f_output )
@@ -493,12 +530,19 @@ public:
 		GenMuHist_2nd->Save( f_output );
 		GenMuHist_3rd->Save( f_output );
 		GenMuHist_4th->Save( f_output );
+
+		GenPairHist_All->Save( f_output );
+		FourGenLepHist->Save( f_output );
 		
+
 		SingleMuHist_All->Save( f_output );
 		SingleMuHist_1st->Save( f_output );
 		SingleMuHist_2nd->Save( f_output );
 		SingleMuHist_3rd->Save( f_output );
 		SingleMuHist_4th->Save( f_output );
+
+		MuonPairHist_All->Save( f_output );
+		FourMuonHist->Save( f_output );
 	}
 
 	void Init_Hist()
@@ -509,11 +553,18 @@ public:
 		this->GenMuHist_3rd = new GenLepHistContainer( "3rd" );
 		this->GenMuHist_4th = new GenLepHistContainer( "4th" );
 
+		this->GenPairHist_All = new GenLepPairHistContainer( "All" );
+		this->FourGenLepHist = new FourGenLepHistContainer( "All" );
+
+
 		this->SingleMuHist_All = new SingleMuHistContainer( "All" );
 		this->SingleMuHist_1st = new SingleMuHistContainer( "1st" );
 		this->SingleMuHist_2nd = new SingleMuHistContainer( "2nd" );
 		this->SingleMuHist_3rd = new SingleMuHistContainer( "3rd" );
 		this->SingleMuHist_4th = new SingleMuHistContainer( "4th" );
+
+		this->MuonPairHist_All = new MuonPairHist_All( "All" );
+		this->FourMuonHist = new FourMuonHistContainer( "All" );
 	}
 };
 
@@ -555,69 +606,47 @@ public:
 		{
 			treeReader->ReadEntry(i_ev);
 
-			TString Type_Channel = this->ChannelType( Br_GenParticle );
+			TString TStr_Channal = "";
+			vector< GenParticle* > vec_Lepton_HardProcess;
+			if( this->Flag_IsSignal )
+				TStr_Channal = ChannelType_Signal( Br_GenParticle, vec_Lepton_HardProcess );
+			else
+				TStr_Channal = ChannelType_Bkg( Br_GenParticle, vec_Lepton_HardProcess );
 
-			if( Type_Channel == "4m" ) // -- only focus on 4 mu channel only -- //
+			if( TStr_Channal == "4m" )
 			{
-				// -- generator level, full acceptance -- //
-				vector< GenParticle* > vec_GenLepFromPhi;
-				vector< GenParticle* > vec_GenLepFromAntiPhi;
+				vector< GenParticle* > vec_Lepton_FinalState;
+				Find_FinalStateLepton_All( vec_Lepton_HardProcess, Br_GenParticle, vec_Lepton_FinalState );
 
-				Int_t nGenParticle = Br_GenParticle->GetEntriesFast();
-				for(Int_t i_gen=0; i_gen<nGenParticle; i_gen++)
-				{
-					GenParticle* GenPar = (GenParticle*)Br_GenParticle->At(i_gen);
-					
-					if( GenPar->Status == 1 ) // -- final state letpons  -- //
-					{
-						Int_t MotherID = this->GetMotherID( GenPar, Br_GenParticle );
-						if( MotherID == 1000600 )
-							vec_GenLepFromPhi.push_back( GenPar );
-						else if( MotherID == -1000600 )
-							vec_GenLepFromAntiPhi.push_back( GenPar );
-					}
-				}
-				
-				MyGenPair *GenPair_Phi = new MyGenPair( vec_GenLepFromPhi[0],vec_GenLepFromPhi[1] );
-				MyGenPair *GenPair_AntiPhi = new MyGenPair( vec_GenLepFromAntiPhi[0],vec_GenLepFromAntiPhi[1] );
-				Hists->Fill_GEN( GenPair_Phi, GenPair_AntiPhi );
+				//////////////////////
+				// -- gen. level -- //
+				//////////////////////
+				// -- signal: ordering is already adjusted to have same mother in vec_Lepton_HardProcess level -- //
+				// -- bkg: no meaning: dimuon variable distribution will not be used -- //
+				MyGenPair *GenPair1 = new MyGenPair( vec_Lepton_FinalState[0],vec_Lepton_FinalState[1] );
+				MyGenPair *GenPair2 = new MyGenPair( vec_Lepton_FinalState[2],vec_Lepton_FinalState[3] );
+				Hists->Fill_GEN( GenPair1, GenPair2 );
 
-
-				// -- reconstruction level -- //
-				vector< Muon* > vec_MuonFromPhi;
-				vector< Muon* > vec_MuonFromAntiPhi;
-
+				///////////////////////
+				// -- reco. level -- //
+				///////////////////////
+				Bool_t Flag_FullyMatched = kFALSE;
+				vector< Muon* > vec_MuonMatched;
 				Int_t nMuon = Br_Muon->GetEntriesFast();
-				// cout << "nMuon: " << nMuon << endl;
-				for(Int_t i_mu=0; i_mu<nMuon; i_mu++)
+				if( nMuon >= 4 ) // -- at least 4 muon should be available in the reco.level -- //
+					Flag_FullyMatched = Matching_RECO_GENMuonHPFS( vec_Lepton_FinalState, Br_Muon, vec_MuonMatched);
+
+				if( Flag_FullyMatched ) // -- then, histograms will be filled -- //
 				{
-					// cout << i_mu << "th reco muon" << endl;
-
-					Muon* RecoMu = (Muon*)Br_Muon->At(i_mu);
-
-					GenParticle* GenMu = (GenParticle*)RecoMu->Particle.GetObject(); // -- corresponding muon at the generator level -- //
-					Int_t motherID = this->GetMotherID( GenMu, Br_GenParticle );
-					if( motherID == 1000600 )
-					{
-						vec_GenLepFromPhi.push_back( GenMu );
-						vec_MuonFromPhi.push_back( RecoMu );
-					}
-					else if( motherID == -1000600 )
-					{
-						vec_GenLepFromAntiPhi.push_back( GenMu );
-						vec_MuonFromAntiPhi.push_back( RecoMu );
-					}
-				}
-
-
-				if( (Int_t)vec_MuonFromPhi.size() == 2 && (Int_t)vec_MuonFromAntiPhi.size() == 2 ) // -- all 4 muons are reconstructed -- //
-				{
-					MyMuonPair *Pair_Phi = new MyMuonPair( vec_MuonFromPhi[0], vec_MuonFromPhi[1] );
-					MyMuonPair *Pair_AntiPhi = new MyMuonPair( vec_MuonFromAntiPhi[0], vec_MuonFromAntiPhi[1] );
+					// -- pairing -- // 
+					MyMuonPair* MuPair1 = new MyMuonPair( vec_MuonMatched[0], vec_MuonMatched[1] );
+					MyMuonPair* MuPair2 = new MyMuonPair( vec_MuonMatched[2], vec_MuonMatched[3] );
 
 					Hists->Fill_RECO( Pair_Phi, Pair_AntiPhi );
 				}
-			}
+
+			} // -- end of if( TStr_Channal == "4m" ) -- //
+
 		} // -- end of event iteration -- //
 
 		TString OutputFileName = this->InputFileName;
@@ -625,87 +654,5 @@ public:
 		TFile *f_output = TFile::Open(OutputFileName, "RECREATE");
 		f_output->cd();
 		Hists->Save( f_output );
-	}
-
-	TString ChannelType(TClonesArray *Br_GenParticle)
-	{
-		TString TStr_Channel = "";
-
-		Int_t nGenParticle = Br_GenParticle->GetEntriesFast();
-		Int_t nGenMuon = 0;
-		Int_t nGenElectron = 0;
-
-		if( this->Flag_IsSignal )
-		{
-			for(Int_t i_gen=0; i_gen<nGenParticle; i_gen++)
-			{
-				GenParticle* GenPar = (GenParticle*)Br_GenParticle->At(i_gen);
-				
-				if( GenPar->Status == 1 ) // -- final state letpons  -- //
-				{
-					Int_t MotherID = this->GetMotherID( GenPar, Br_GenParticle );
-					// cout << "MotherID: " << MotherID << endl;
-
-					if( fabs(MotherID) == 1000600 ) // -- from intermediate particle -- //
-					{
-						if( fabs(GenPar->PID) == 13)
-							nGenMuon++;
-						else if( fabs(GenPar->PID) == 11 )
-							nGenElectron++;
-					}
-				}
-			}
-		}
-		else // -- if ZZ->4l -- //
-		{
-			for(Int_t i_gen=0; i_gen<nGenParticle; i_gen++)
-			{
-				GenParticle* GenPar = (GenParticle*)Br_GenParticle->At(i_gen);
-				
-				if( GenPar->Status == 1 ) // -- final state letpons  -- //
-				{
-					Int_t MotherID = this->GetMotherID( GenPar, Br_GenParticle );
-					if( fabs(MotherID) == 23 || GenPar->PID == MotherID )
-					{
-						if( fabs(GenPar->PID) == 13)
-							nGenMuon++;
-						else if( fabs(GenPar->PID) == 11 )
-							nGenElectron++;
-					}
-
-				}
-			}
-		}
-
-
-		if( nGenElectron == 4 && nGenMuon == 0 ) TStr_Channel = "4e";
-		else if( nGenElectron == 3 && nGenMuon == 1 ) TStr_Channel = "3e1m";
-		else if( nGenElectron == 2 && nGenMuon == 2 ) TStr_Channel = "2e2m";
-		else if( nGenElectron == 1 && nGenMuon == 3 ) TStr_Channel = "1e3m";
-		else if( nGenElectron == 0 && nGenMuon == 4 ) TStr_Channel = "4m";
-		else cout << "Unexpected case: # muon = " << nGenMuon << ", # electron = " << nGenElectron << endl;
-
-		return TStr_Channel;
-	}
-
-	void PrintAll_GenParticle(TClonesArray *Br_GenParticle )
-	{
-		Int_t nGenParticle = Br_GenParticle->GetEntriesFast();
-		for(Int_t i_gen=0; i_gen<nGenParticle; i_gen++)
-		{
-			GenParticle* GenPar = (GenParticle*)Br_GenParticle->At(i_gen);
-			cout << "[" << i_gen << "th gen-particle]: ID = " << GenPar->PID << ", status = " << GenPar->Status << ", GenPar->M1: " << GenPar->M1 << ", GenPar->M2: " << GenPar->M2 << endl;
-		}
-		cout << endl;
-	}
-
-	Int_t GetMotherID( GenParticle* GenPar, TClonesArray *Br_GenParticle )
-	{
-		if( GenPar->M1 != GenPar->M2 )
-			cout << "WARNING: M1 and M2 is different! this method (GetMotherID) will only check M1" << endl;
-
-		GenParticle* Mother = (GenParticle*)Br_GenParticle->At(GenPar->M1);
-		Int_t motherID = Mother->PID;
-		return motherID;
 	}
 };

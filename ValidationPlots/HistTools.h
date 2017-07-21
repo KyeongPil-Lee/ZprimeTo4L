@@ -54,6 +54,7 @@ TString ChannelType_Signal(TClonesArray *Br_GenParticle, vector< GenParticle* >&
 	Int_t nGenMuon = 0;
 	Int_t nGenElectron = 0;
 
+	vector< GenParticle* > vec_Lepton_HardProcess_temp;
 	for(Int_t i_gen=0; i_gen<nGenParticle; i_gen++)
 	{
 		GenParticle* GenPar = (GenParticle*)Br_GenParticle->At(i_gen);
@@ -62,7 +63,7 @@ TString ChannelType_Signal(TClonesArray *Br_GenParticle, vector< GenParticle* >&
 			Int_t ID_Mother1 = GetMotherID( GenPar, Br_GenParticle );
 			if( (GenPar->Status == 23 || GenPar->Status == 1) && fabs(ID_Mother1) == 1000600 )
 			{
-				vec_Lepton_HardProcess.push_back( GenPar );
+				vec_Lepton_HardProcess_temp.push_back( GenPar );
 				if( fabs(GenPar->PID) == 13)
 					nGenMuon++;
 				else if( fabs(GenPar->PID) == 11 )
@@ -70,6 +71,23 @@ TString ChannelType_Signal(TClonesArray *Br_GenParticle, vector< GenParticle* >&
 			}
 		}
 	}
+
+	// -- re-ordering: ([0] and [1]) -> from 1000600, ([2] and [3]) -> from -1000600 -- // 
+	vector< GenParticle* > vec_FromPhi;
+	vector< GenParticle* > vec_FromAntiPhi;
+	for( const auto& GenPar : vec_Lepton_HardProcess_temp )
+	{
+		Int_t MotherID = GetMotherID( GenPar, Br_GenParticle );
+		if( MotherID == 1000600 )
+			vec_FromPhi.push_back( GenPar );
+		else if( MotherID == -1000600 )
+			vec_FromAntiPhi.push_back( GenPar );
+	}
+
+	vec_Lepton_HardProcess.push_back( vec_FromPhi[0] );
+	vec_Lepton_HardProcess.push_back( vec_FromPhi[1] );
+	vec_Lepton_HardProcess.push_back( vec_FromAntiPhi[0] );
+	vec_Lepton_HardProcess.push_back( vec_FromAntiPhi[1] );
 
 	if( nGenElectron == 4 && nGenMuon == 0 ) TStr_Channel = "4e";
 	else if( nGenElectron == 3 && nGenMuon == 1 ) TStr_Channel = "3e1m";
