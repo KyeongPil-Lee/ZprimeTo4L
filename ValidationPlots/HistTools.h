@@ -150,9 +150,9 @@ GenParticle* Find_FinalStateLepton( GenParticle* GenPar, TClonesArray *Br_GenPar
 	Int_t i=0;
 	while( true )
 	{
-		cout << "[" << i << "th iteration]" << endl; 
-		cout << "\t"; Print_GenParticle( Mother );
-		cout << "\t"; Print_GenParticle( Daughter );
+		// cout << "[" << i << "th iteration]" << endl; 
+		// cout << "\t"; Print_GenParticle( Mother );
+		// cout << "\t"; Print_GenParticle( Daughter );
 
 		if( Daughter->Status == 1 ) // -- find the corresponding final state! -- //
 			break;
@@ -187,4 +187,72 @@ void Find_FinalStateLepton_All( vector< GenParticle* > vec_HP, TClonesArray *Br_
 			vec_FS.push_back( GenPar_FS );
 		}
 	}
+}
+
+Bool_t Pass_CMSAcc( vector<GenParticle*> vec_Lepton_FinalState, Double_t PtMin = 10, Double_t EtaMax = 2.4 )
+{
+	Bool_t Flag_PassAcc = kTRUE;
+	for( const auto& GenPar : vec_Lepton_FinalState )
+	{
+		if( !(GenPar->PT > PtMin && fabs(GenPar->Eta) < EtaMax) )
+		{
+			Flag_PassAcc = kFALSE;
+			break;
+		}
+	}
+
+	return Flag_PassAcc;
+}
+
+Bool_t IsSame_GenParticle( GenParticle* GenPar1, GenParticle *GenPar2 )
+{
+	Bool_t Flag = kFALSE;
+	if( (GenPar1->Px == GenPar2->Px) &&
+		(GenPar1->Py == GenPar2->Py) &&
+		(GenPar1->Pz == GenPar2->Pz) &&
+		(GenPar1->E == GenPar2->E) &&
+		(GenPar1->Status == GenPar2->Status) &&
+		(GenPar1->M1 == GenPar2->M1) &&
+		(GenPar1->M2 == GenPar2->M2) ) Flag = kTRUE;
+
+	return Flag;
+}
+
+Bool_t Matching_RECO_GENMuonHPFS( vector<GenParticle*> vec_Lepton_FinalState, TClonesArray* Br_Muon, vector< Muon* >& vec_MuonMatched )
+{
+	Bool_t Flag_Success = kFALSE;
+
+	Int_t nMuon = Br_Muon->GetEntriesFast();
+
+	for( const auto& GenMu_FS : vec_Lepton_FinalState )
+	{
+		// printf("[GenMu_FS] (Pt, Eta, Phi) = (%9.3lf, %9.3lf, %9.3lf)\n", GenMu_FS->PT, GenMu_FS->Eta, GenMu_FS->Phi);
+		for(Int_t i_mu=0; i_mu<nMuon; i_mu++)
+		{
+			// cout << i_mu << "th reco muon" << endl;
+
+			Muon* RecoMu = (Muon*)Br_Muon->At(i_mu);
+			GenParticle* GenMu = (GenParticle*)RecoMu->Particle.GetObject();
+			// printf("\t[GenMu matched to %02d muon] (Pt, Eta, Phi) = (%9.3lf, %9.3lf, %9.3lf)", i_mu, GenMu->PT, GenMu->Eta, GenMu->Phi);
+
+			// Bool_t isMatched = kFALSE;
+			// if( *(GenMu_FS) == *(GenMu) )
+			if( IsSame_GenParticle(GenMu_FS, GenMu) )
+			{
+				// isMatched = kTRUE;
+				vec_MuonMatched.push_back( RecoMu );
+				break;
+			}
+
+			// cout << "-> isMatched = " << isMatched << endl;
+
+		} // -- end of reco-lepton iteration -- //
+
+	} // -- end of gen-lepton iteration -- //
+
+	// -- check whether "ALL" of muons are matched to the final state gen-leptons from hard process -- //
+	if( vec_MuonMatched.size() == vec_Lepton_FinalState.size() )
+		Flag_Success = kTRUE;
+
+	return Flag_Success;
 }
