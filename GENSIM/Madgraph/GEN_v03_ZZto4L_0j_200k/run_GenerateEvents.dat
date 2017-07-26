@@ -1,8 +1,11 @@
-set nb_core 20
-launch
-order=NLO
-shower=ON
-done #determine which operations are executed: NLO, fixed order ...
+# set nb_core 20
+set nb_core 40
 
-done #whether edit the cards or not
+launch
+	order=NLO
+	shower=ON
+	done #determine which operations are executed: NLO, fixed order ...
+
+	set run_card nevents 1000000
+	done #whether edit the cards or not
 
