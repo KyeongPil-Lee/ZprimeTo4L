@@ -161,7 +161,7 @@ public:
 	{
 		this->h_Pt = new TH1D("h_Pt_4GenLep_"+this->Type, "", 10000, 0, 10000);
 		this->h_Rap = new TH1D("h_Rap_4GenLep_"+this->Type, "", 200, -10, 10);
-		this->h_Mass = new TH1D("h_Mass_4GenLep_"+this->Type, "", 80, -4, 4);
+		this->h_Mass = new TH1D("h_Mass_4GenLep_"+this->Type, "", 10000, 0, 10000);
 	}
 };
 
@@ -212,7 +212,7 @@ public:
 	{
 		this->h_Pt = new TH1D("h_Pt_4Muon_"+this->Type, "", 10000, 0, 10000);
 		this->h_Rap = new TH1D("h_Rap_4Muon_"+this->Type, "", 200, -10, 10);
-		this->h_Mass = new TH1D("h_Mass_4Muon_"+this->Type, "", 80, -4, 4);
+		this->h_Mass = new TH1D("h_Mass_4Muon_"+this->Type, "", 10000, 0, 10000);
 		this->h_RelDiff_Mass = new TH1D("h_RelDiff_Mass_4Muon_"+this->Type, "", 1000, -1, 1);
 	}
 };
@@ -256,7 +256,7 @@ public:
 	{
 		this->h_Pt = new TH1D("h_Pt_2GenLep_"+this->Type, "", 10000, 0, 10000);
 		this->h_Rap = new TH1D("h_Rap_2GenLep_"+this->Type, "", 200, -10, 10);
-		this->h_Mass = new TH1D("h_Mass_2GenLep_"+this->Type, "", 80, -4, 4);
+		this->h_Mass = new TH1D("h_Mass_2GenLep_"+this->Type, "", 10000, 0, 10000);
 	}
 };
 
@@ -305,7 +305,7 @@ public:
 	{
 		this->h_Pt = new TH1D("h_Pt_2Muon_"+this->Type, "", 10000, 0, 10000);
 		this->h_Rap = new TH1D("h_Rap_2Muon_"+this->Type, "", 200, -10, 10);
-		this->h_Mass = new TH1D("h_Mass_2Muon_"+this->Type, "", 80, -4, 4);
+		this->h_Mass = new TH1D("h_Mass_2Muon_"+this->Type, "", 10000, 0, 10000);
 		this->h_RelDiff_Mass = new TH1D("h_RelDiff_Mass_2Muon_"+this->Type, "", 1000, -1, 1);
 	}
 };
@@ -563,7 +563,7 @@ public:
 		this->SingleMuHist_3rd = new SingleMuHistContainer( "3rd" );
 		this->SingleMuHist_4th = new SingleMuHistContainer( "4th" );
 
-		this->MuonPairHist_All = new MuonPairHist_All( "All" );
+		this->MuonPairHist_All = new MuonPairHistContainer( "All" );
 		this->FourMuonHist = new FourMuonHistContainer( "All" );
 	}
 };
@@ -642,7 +642,7 @@ public:
 					MyMuonPair* MuPair1 = new MyMuonPair( vec_MuonMatched[0], vec_MuonMatched[1] );
 					MyMuonPair* MuPair2 = new MyMuonPair( vec_MuonMatched[2], vec_MuonMatched[3] );
 
-					Hists->Fill_RECO( Pair_Phi, Pair_AntiPhi );
+					Hists->Fill_RECO( MuPair1, MuPair2 );
 				}
 
 			} // -- end of if( TStr_Channal == "4m" ) -- //
