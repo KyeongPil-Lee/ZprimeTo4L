@@ -3,11 +3,18 @@
 void Hist_Validation()
 {
 	TString DataPath = gSystem->Getenv("KP_DATA_PATH");
+<<<<<<< HEAD
 
 	// TString InputFileName_Bkg = DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/ZZto4L0j_200k.root";
 	// Analyzer *analyzer_bkg = new Analyzer(InputFileName_Bkg);
 	// analyzer_bkg->IsSignal( kFALSE );
 	// analyzer_bkg->Analyze();
+=======
+	TString InputFileName = "";
+	Bool_t Flag_IsSignal = kFALSE;
+
+	InputFileName = DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/ZZto4L0j_1M.root"; Flag_IsSignal = kFALSE;
+>>>>>>> 50fd7a196ca06c0ed9715a70dcbae0513d03007a
 
 	vector< TString > vec_InputFileName_Signal = 
 	{
