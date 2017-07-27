@@ -111,7 +111,7 @@ public:
 
 Bool_t CompareLepton( MyLepton* Lepton1, MyLepton* Lepton2 )
 {
-	return Lepton1->PT > Lepton2->PT;
+	return Lepton1->Pt > Lepton2->Pt;
 }
 
 class MyLeptonPair
@@ -130,7 +130,7 @@ public:
 
 	MyLeptonPair( MyLepton* Lepton1, MyLepton* Lepton2 )
 	{
-		if( Lepton1->PT > Lepton2->PT )
+		if( Lepton1->Pt > Lepton2->Pt )
 		{
 			this->First = Lepton1;
 			this->Second = Lepton2;
@@ -146,8 +146,8 @@ public:
 
 	void Calc_Var()
 	{
-		TLorentzVector LVec_First = First->P4();
-		TLorentzVector LVec_Second = Second->P4();
+		TLorentzVector LVec_First = First->LVec_P;
+		TLorentzVector LVec_Second = Second->LVec_P;
 		this->LVec_P = LVec_First + LVec_Second;
 
 		this->M = this->LVec_P.M();
@@ -467,11 +467,11 @@ public:
 
 	void Fill( MyLepton *Lepton, Double_t weight = 1.0 )
 	{
-		Double_t Pt_RECO = Lepton->PT;
+		Double_t Pt_RECO = Lepton->Pt;
 		Double_t Eta_RECO = Lepton->Eta;
 		Double_t Phi_RECO = Lepton->Phi;
 
-		GenParticle* GenLepton = (GenParticle*)Lepton->Particle.GetObject();
+		GenParticle* GenLepton = Lepton->GenLepton;
 		Double_t Pt_GEN = GenLepton->PT;
 		Double_t Eta_GEN = GenLepton->Eta;
 		Double_t Phi_GEN = GenLepton->Phi;

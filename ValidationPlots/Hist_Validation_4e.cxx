@@ -1,6 +1,6 @@
-#include "Hist_Validation.h"
+#include "Hist_Validation_4e.h"
 
-void Hist_Validation()
+void Hist_Validation_4e()
 {
 	TString DataPath = gSystem->Getenv("KP_DATA_PATH");
 
