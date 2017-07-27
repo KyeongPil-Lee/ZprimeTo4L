@@ -59,15 +59,12 @@ public:
 	Double_t Pt;
 	Double_t Eta;
 	Double_t Phi;
-	Double_t Px;
-	Double_t Py;
-	Double_t Pz;
 	TLorentzVector LVec_P;
 
-	Bool_t isMuon;
+	Bool_t isMu;
 	Muon *Mu;
 
-	Bool_t isElectron;
+	Bool_t isElec;
 	Electron *Elec;
 	GenParticle* GenLepton;
 
@@ -76,9 +73,6 @@ public:
 		this->Pt = 0;
 		this->Eta = 0;
 		this->Phi = 0;
-		this->Px = 0;
-		this->Py = 0;
-		this->Pz = 0;
 		this->LVec_P.SetPxPyPzE(0,0,0,0);
 
 		this->isMu = kFALSE;
@@ -95,9 +89,6 @@ public:
 		this->Pt = _Muon->PT;
 		this->Eta = _Muon->Eta;
 		this->Phi = _Muon->Phi;
-		this->Px = _Muon->Px;
-		this->Py = _Muon->Py;
-		this->Pz = _Muon->Pz;
 		this->LVec_P = _Muon->P4();
 
 		this->isMu = kTRUE;
@@ -110,9 +101,6 @@ public:
 		this->Pt = _Electron->PT;
 		this->Eta = _Electron->Eta;
 		this->Phi = _Electron->Phi;
-		this->Px = _Electron->Px;
-		this->Py = _Electron->Py;
-		this->Pz = _Electron->Pz;
 		this->LVec_P = _Electron->P4();
 
 		this->isElec = kTRUE;
