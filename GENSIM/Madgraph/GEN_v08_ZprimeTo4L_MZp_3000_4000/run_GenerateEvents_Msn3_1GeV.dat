@@ -1,0 +1,13 @@
+set automatic_html_opening False
+set nb_core 30
+generate_events
+	shower=PYTHIA8
+	set MZp 3000
+	set Msn3 1
+	set nevents 200000
+
+generate_events
+	shower=PYTHIA8
+	set MZp 4000
+	set Msn3 1
+	set nevents 200000
