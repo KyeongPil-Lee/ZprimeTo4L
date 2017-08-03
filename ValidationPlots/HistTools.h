@@ -247,9 +247,9 @@ public:
 
 	void Init_Hist()
 	{
-		this->h_Pt = new TH1D("h_Pt_4GenLep_"+this->Type, "", 10000, 0, 10000);
-		this->h_Rap = new TH1D("h_Rap_4GenLep_"+this->Type, "", 200, -10, 10);
-		this->h_Mass = new TH1D("h_Mass_4GenLep_"+this->Type, "", 10000, 0, 10000);
+		this->h_Pt = new TH1D("h_Pt_4Lepton_GEN_"+this->Type, "", 10000, 0, 10000);
+		this->h_Rap = new TH1D("h_Rap_4Lepton_GEN_"+this->Type, "", 200, -10, 10);
+		this->h_Mass = new TH1D("h_Mass_4Lepton_GEN_"+this->Type, "", 10000, 0, 10000);
 	}
 };
 

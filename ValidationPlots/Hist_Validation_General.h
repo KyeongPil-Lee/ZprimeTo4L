@@ -228,13 +228,14 @@ public:
 				///////////////////////
 				vector< MyLepton* > vec_RECOLepton = this->MakeVector_MyLepton( Br_Electron, Br_Muon );
 
+				// -- matching reco-level leptons and gen-level leptons from hard process final state one by one -- //
 				Bool_t Flag_FullyMatched = kFALSE;
 				vector< MyLepton* > vec_LeptonMatched;
 				Int_t nRECOLepton = vec_RECOLepton.size();
 				if( nRECOLepton >= 4 ) // -- at least 4 leptons should be available in the reco.level -- //
 					Flag_FullyMatched = Matching_RECO_GENMuonHPFS( vec_GENLepton_FinalState, vec_RECOLepton, vec_LeptonMatched);
 
-				if( Flag_FullyMatched ) // -- then, histograms will be filled -- //
+				if( Flag_FullyMatched ) // -- if "all" reco-lepton are matched, then histograms will be filled -- //
 				{
 					// -- pairing -- // 
 					MyLeptonPair *LepPair1 = new MyLeptonPair( vec_LeptonMatched[0], vec_LeptonMatched[1] );
@@ -243,7 +244,7 @@ public:
 					Hists->Fill_RECO( LepPair1, LepPair2 );
 				}
 
-			} // -- end of if( TStr_Channal == "4m" ) -- //
+			} // -- end of if( TStr_Channal == this->ChannelType ) -- //
 
 		} // -- end of event iteration -- //
 
