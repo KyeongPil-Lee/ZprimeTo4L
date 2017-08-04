@@ -1,0 +1,7 @@
+#!bin/bash
+$KP_DELPHES_PATH/DelphesHepMC $KP_DELPHES_PATH/cards/delphes_card_CMS_SameEff_BE.tcl /home/kplee/data7/Delphes/v20170804Test_1st_SameElecEff_Barrel_Endcap/MZp_4000_Msn3_1_200k.root /home/kplee/data7/LHE/v20170719_1st_ZprimeTo4L_AfterHadronization/MZp_4000_Msn3_1_200k.hepmc
+$KP_DELPHES_PATH/DelphesHepMC $KP_DELPHES_PATH/cards/delphes_card_CMS_SameEff_BE.tcl /home/kplee/data7/Delphes/v20170804Test_1st_SameElecEff_Barrel_Endcap/MZp_4000_Msn3_40_200k.root /home/kplee/data7/LHE/v20170719_1st_ZprimeTo4L_AfterHadronization/MZp_4000_Msn3_40_200k.hepmc
+$KP_DELPHES_PATH/DelphesHepMC $KP_DELPHES_PATH/cards/delphes_card_CMS_SameEff_BE.tcl /home/kplee/data7/Delphes/v20170804Test_1st_SameElecEff_Barrel_Endcap/MZp_4000_Msn3_50_200k.root /home/kplee/data7/LHE/v20170719_1st_ZprimeTo4L_AfterHadronization/MZp_4000_Msn3_50_200k.hepmc
+$KP_DELPHES_PATH/DelphesHepMC $KP_DELPHES_PATH/cards/delphes_card_CMS_SameEff_BE.tcl /home/kplee/data7/Delphes/v20170804Test_1st_SameElecEff_Barrel_Endcap/MZp_4000_Msn3_1200_200k.root /home/kplee/data7/LHE/v20170719_1st_ZprimeTo4L_AfterHadronization/MZp_4000_Msn3_1200_200k.hepmc
+
+echo "finished"
