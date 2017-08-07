@@ -197,10 +197,12 @@ public:
 		TClonesArray *Br_Electron = treeReader->UseBranch("Electron");
 		TClonesArray *Br_GenParticle = treeReader->UseBranch("Particle");
 
-		Int_t nTotal;
-		Int_t nPass_Eta[4];
-		Int_t nPass_Pt[4];
-		Int_t nPass_All;
+		Int_t nTotal = 0;
+		Int_t nPass_Eta[4] = {0};
+		Int_t nPass_Pt[4] = {0};
+		Int_t nPass_All = 0;
+
+		Int_t nTotal_Reco = 0;
 
 		// nTotEvent = 100;
 		for(Int_t i_ev = 0; i_ev < nTotEvent; i_ev++)
@@ -232,10 +234,10 @@ public:
 				sort( vec_GENLepton_FinalState.begin(), vec_GENLepton_FinalState.end(), CompareGenParticle );
 				for(Int_t i=0; i<4; i++)
 				{
-					if( vec_GENLepton_FinalState[i].Pt > 10 ) nPass_Pt[i]++;
+					if( vec_GENLepton_FinalState[i]->PT > 10 ) nPass_Pt[i]++;
 					else Flag_Acc = kFALSE;
 
-					if( fabs(vec_GENLepton_FinalState[i].eta) < 2.4 ) nPass_Eta[i]++;
+					if( fabs(vec_GENLepton_FinalState[i]->Eta) < 2.4 ) nPass_Eta[i]++;
 					else Flag_Acc = kFALSE;
 				}
 				if( Flag_Acc ) nPass_All++;
@@ -251,26 +253,22 @@ public:
 				// MyGenPair *GenPair2 = new MyGenPair( vec_GENLepton_FinalState[2],vec_GENLepton_FinalState[3] );
 				// Hists->Fill_GEN( GenPair1, GenPair2 );
 
-				// ///////////////////////
-				// // -- reco. level -- //
-				// ///////////////////////
-				// vector< MyLepton* > vec_RECOLepton = this->MakeVector_MyLepton( Br_Electron, Br_Muon );
+				///////////////////////
+				// -- reco. level -- //
+				///////////////////////
+				vector< MyLepton* > vec_RECOLepton = this->MakeVector_MyLepton( Br_Electron, Br_Muon );
 
-				// // -- matching reco-level leptons and gen-level leptons from hard process final state one by one -- //
-				// Bool_t Flag_FullyMatched = kFALSE;
-				// vector< MyLepton* > vec_LeptonMatched;
-				// Int_t nRECOLepton = vec_RECOLepton.size();
-				// if( nRECOLepton >= 4 ) // -- at least 4 leptons should be available in the reco.level -- //
-				// 	Flag_FullyMatched = Matching_RECO_GENMuonHPFS( vec_GENLepton_FinalState, vec_RECOLepton, vec_LeptonMatched);
+				// -- matching reco-level leptons and gen-level leptons from hard process final state one by one -- //
+				Bool_t Flag_FullyMatched = kFALSE;
+				vector< MyLepton* > vec_LeptonMatched;
+				Int_t nRECOLepton = vec_RECOLepton.size();
+				if( nRECOLepton >= 4 ) // -- at least 4 leptons should be available in the reco.level -- //
+					Flag_FullyMatched = Matching_RECO_GENMuonHPFS( vec_GENLepton_FinalState, vec_RECOLepton, vec_LeptonMatched);
 
-				// if( Flag_FullyMatched ) // -- if "all" reco-lepton are matched, then histograms will be filled -- //
-				// {
-				// 	// -- pairing -- // 
-				// 	MyLeptonPair *LepPair1 = new MyLeptonPair( vec_LeptonMatched[0], vec_LeptonMatched[1] );
-				// 	MyLeptonPair *LepPair2 = new MyLeptonPair( vec_LeptonMatched[2], vec_LeptonMatched[3] );
-
-				// 	Hists->Fill_RECO( LepPair1, LepPair2 );
-				// }
+				if( Flag_FullyMatched ) // -- if "all" reco-lepton are matched, then histograms will be filled -- //
+				{
+					nTotal_Reco++;
+				}
 
 			} // -- end of if( TStr_Channal == this->ChannelType ) -- //
 
@@ -287,6 +285,9 @@ public:
 
 		Double_t ratio_total = (Double_t)nPass_All/nTotal;
 		printf("[Total] nPass/nTotal = %d/%d = %.5lf\n", nPass_All, nTotal, ratio_total);
+
+		Double_t ratio_Reco = (Double_t)nTotal_Reco/nTotal;
+		printf("[reco] nTotal_Reco/nTotal = %d/%d = %.5lf\n\n", nTotal_Reco, nTotal, ratio_Reco);
 	}
 
 	vector< MyLepton* > MakeVector_MyLepton( TClonesArray* Br_Electron, TClonesArray* Br_Muon )
