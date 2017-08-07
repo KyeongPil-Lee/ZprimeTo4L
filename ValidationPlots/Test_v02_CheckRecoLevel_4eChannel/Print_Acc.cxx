@@ -1,6 +1,6 @@
-#include "Hist_Validation_General.h"
+#include "Print_Acc.h"
 
-void Hist_Validation_General( TString ChannelType )
+void Print_Acc( TString ChannelType )
 {
 	TString DataPath = gSystem->Getenv("KP_DATA_PATH");
 
@@ -48,8 +48,8 @@ void Hist_Validation_General( TString ChannelType )
 	}
 }
 
-void Hist_Validation_General()
+void Print_Acc()
 {
-	Hist_Validation_General( "4e" );
-	Hist_Validation_General( "4m" );
+	Print_Acc( "4e" );
+	Print_Acc( "4m" );
 }
