@@ -1,0 +1,55 @@
+#include "Print_Acc.h"
+
+void Print_Acc( TString ChannelType )
+{
+	TString DataPath = gSystem->Getenv("KP_DATA_PATH");
+
+	// TString InputFileName_Bkg = DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/ZZto4L0j_1M.root";
+	// Analyzer *analyzer_bkg = new Analyzer(InputFileName_Bkg);
+	// analyzer_bkg->IsSignal( kFALSE );
+	// analyzer_bkg->Set_ChannelType( ChannelType );
+	// analyzer_bkg->Analyze();
+
+	vector< TString > vec_InputFileName_Signal = 
+	{
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_200_Msn3_1_200k.root",
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_200_Msn3_50_200k.root",
+
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_800_Msn3_1_200k.root",
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_800_Msn3_50_200k.root",
+
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_1000_Msn3_10_200k.root",
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_1000_Msn3_50_200k.root",
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_1000_Msn3_300_200k.root",
+
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_2000_Msn3_1_200k.root",
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_2000_Msn3_20_200k.root",
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_2000_Msn3_50_200k.root",
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_2000_Msn3_600_200k.root",
+
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_3000_Msn3_1_200k.root",
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_3000_Msn3_30_200k.root",
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_3000_Msn3_50_200k.root",
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_3000_Msn3_900_200k.root",
+
+		DataPath+"/Delphes/v20170807_Test_1st_SameTrackingEff_Muon_Electron/MZp_4000_Msn3_1_200k.root",
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_4000_Msn3_40_200k.root",
+		DataPath+"/Delphes/v20170807_Test_1st_SameTrackingEff_Muon_Electron/MZp_4000_Msn3_50_200k.root",
+		// DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_4000_Msn3_1200_200k.root"
+	};
+
+	for( const auto& InputFileName_Signal : vec_InputFileName_Signal )
+	{
+		cout << "InputFileName_Signal: " << InputFileName_Signal << endl;
+		Analyzer *analyzer_sig = new Analyzer(InputFileName_Signal);
+		analyzer_sig->IsSignal( kTRUE );
+		analyzer_sig->Set_ChannelType( ChannelType );
+		analyzer_sig->Analyze();
+	}
+}
+
+void Print_Acc()
+{
+	Print_Acc( "4e" );
+	Print_Acc( "4m" );
+}
