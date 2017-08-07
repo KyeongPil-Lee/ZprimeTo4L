@@ -203,6 +203,8 @@ public:
 		Int_t nPass_All = 0;
 
 		Int_t nTotal_Reco = 0;
+		Int_t nEvent_MoreThan4RecoElec = 0;
+		Int_t nEvent_MoreThan4RecoMu = 0;
 
 		// nTotEvent = 100;
 		for(Int_t i_ev = 0; i_ev < nTotEvent; i_ev++)
@@ -270,6 +272,23 @@ public:
 					nTotal_Reco++;
 				}
 
+				Int_t nElecRECO = 0;
+				Int_t nMuRECO = 0;
+				for( const auto &Lepton : vec_RECOLepton )
+				{
+					if( Lepton.isElec ) nElecRECO++;
+					if( Lepton.isMu ) nMuRECO++;
+				}
+
+				if( nElecRECO >= 4 ) nEvent_MoreThan4RecoElec++;
+				if( nMuRECO >= 4 ) nEvent_MoreThan4RecoMu++;
+
+				if( nElecRECO >= 4 && nMuRECO >= 4)
+				{
+					cout << "Both reco-level # muon and electron is more than 4!" << endl;
+					cout << "\tnElecReco: " << nElecRECO << endl;
+					cout << "\tnMuRECO: " << nMuRECO << endl;
+				}
 			} // -- end of if( TStr_Channal == this->ChannelType ) -- //
 
 		} // -- end of event iteration -- //
@@ -287,7 +306,13 @@ public:
 		printf("[Total] nPass/nTotal = %d/%d = %.5lf\n", nPass_All, nTotal, ratio_total);
 
 		Double_t ratio_Reco = (Double_t)nTotal_Reco/nTotal;
-		printf("[reco] nTotal_Reco/nTotal = %d/%d = %.5lf\n\n", nTotal_Reco, nTotal, ratio_Reco);
+		printf("[reco] nTotal_Reco/nTotal = %d/%d = %.5lf\n", nTotal_Reco, nTotal, ratio_Reco);
+
+		Double_t ratio_RecoElec = (Double_t)nEvent_MoreThan4RecoElec/nTotal;
+		printf("[reco] nEvent (# elec >= 4)/nTotal = %d/%d = %.5lf\n", nEvent_MoreThan4RecoElec, nTotal, ratio_RecoElec);
+
+		Double_t ratio_RecoMu = (Double_t)nEvent_MoreThan4RecoMu/nTotal;
+		printf("[reco] nEvent (# mu >= 4)/nTotal = %d/%d = %.5lf\n\n", nEvent_MoreThan4RecoMu, nTotal, ratio_RecoMu);
 	}
 
 	vector< MyLepton* > MakeVector_MyLepton( TClonesArray* Br_Electron, TClonesArray* Br_Muon )
