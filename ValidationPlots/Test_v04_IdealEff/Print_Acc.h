@@ -276,8 +276,8 @@ public:
 				Int_t nMuRECO = 0;
 				for( const auto &Lepton : vec_RECOLepton )
 				{
-					if( Lepton.isElec ) nElecRECO++;
-					if( Lepton.isMu ) nMuRECO++;
+					if( Lepton->isElec ) nElecRECO++;
+					if( Lepton->isMu ) nMuRECO++;
 				}
 
 				if( nElecRECO >= 4 ) nEvent_MoreThan4RecoElec++;
