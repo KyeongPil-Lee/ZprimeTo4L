@@ -298,9 +298,9 @@ module SimpleCalorimeter ECal {
 
   # set ECalResolutionFormula {resolution formula as a function of eta and energy}
   # Eta shape from arXiv:1306.2016, Energy shape from arXiv:1502.02701
-  set ResolutionFormula {                      (abs(eta) <= 1.5) * (0.0) +
-                             (abs(eta) > 1.5 && abs(eta) <= 2.5) * (0.0) +
-                             (abs(eta) > 2.5 && abs(eta) <= 5.0) * (0.0) }
+  set ResolutionFormula {                      (abs(eta) <= 1.5) * (1e-4) +
+                             (abs(eta) > 1.5 && abs(eta) <= 2.5) * (1e-4) +
+                             (abs(eta) > 2.5 && abs(eta) <= 5.0) * (1e-4) }
 
 }
 
