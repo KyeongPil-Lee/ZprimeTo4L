@@ -3,7 +3,7 @@
 void Print_Acc( TString ChannelType )
 {
 	TString DataPath = gSystem->Getenv("KP_DATA_PATH");
-	TString BasePath = DataPath+"/Delphes/v20170808_Test_1st_IdealEff_NoIso";
+	TString BasePath = DataPath+"/Delphes/v20170809_Test_1st_IdealResol_Ecal";
 
 	// TString InputFileName_Bkg = DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/ZZto4L0j_1M.root";
 	// Analyzer *analyzer_bkg = new Analyzer(InputFileName_Bkg);
