@@ -22,7 +22,7 @@
 #include "classes/DelphesClasses.h"
 #include "external/ExRootAnalysis/ExRootTreeReader.h"
 
-#include "../HistTools.h"
+#include "HistTools.h"
 
 // class HistContainer
 // {
