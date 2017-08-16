@@ -7,6 +7,9 @@ fi
 # -- analyzer path (do not insert "/" in the end of the path)-- #
 export KP_ANALYZER_PATH=$(pwd)
 
+# -- root setup (only for ROO6)-- #
+export ROOT_INCLUDE_PATH=${KP_ANALYZER_PATH}:${ROOT_INCLUDE_PATH}
+
 # -- cms1.snu.ac.kr -- #
 export SCRAM_ARCH=slc6_amd64_gcc530
 export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
