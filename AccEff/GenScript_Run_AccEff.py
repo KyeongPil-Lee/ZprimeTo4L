@@ -2,7 +2,7 @@ import os
 
 CodeName = "AccEff.cxx"
 
-BasePath = os.environ['KP_DATA_PATH']
+DataPath = os.environ['KP_DATA_PATH']
 List_SamplePath = [
 DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/ZZto4L0j_1M.root",
 
@@ -39,6 +39,7 @@ if "Local" not in os.listdir("."):
 cwd = os.getcwd()
 
 f = open("Run_AccEff.sh", "w")
+f.write("#!bin/bash\n\n")
 for SamplePath in List_SamplePath:
 	SampleName = SamplePath.split("/")[-1].split(".root")[0]
 	SubDirPath = "Local/%s" % SampleName
@@ -48,12 +49,13 @@ for SamplePath in List_SamplePath:
 	cmd_mkdir = "mkdir %s" % SubDirPath
 	cmd_cp = "cp %s %s" % (CodeName, SubDirPath)
 	cmd_cd = "cd %s" % (SubDirPath)
-	cmd_code = 'root -b -q %s("%s", "%s", %d)++ >&log&' % (CodeName, SamplePath, Flag_IsSignal)
+	cmd_code = 'root -b -q %s("%s", "%s", %d)++ >&log&' % (CodeName, SamplePath, SampleName, Flag_IsSignal)
 	cmd_cp2 = 'cd %s' % cwd
 
 	f.write( "%s\n" % cmd_mkdir )
 	f.write( "%s\n" % cmd_cp )
 	f.write( "%s\n" % cmd_cd )
+	f.write( "%s\n" % cmd_code )
 	f.write( "%s\n\n" % cmd_cp2 )
 
-f.write('echo "Submission is finished\n\n"')
+f.write('echo "Submission is finished"\n\n')
