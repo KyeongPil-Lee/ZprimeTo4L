@@ -107,6 +107,9 @@ public:
 		this->Elec = _Electron;
 		this->GenLepton = (GenParticle*)_Electron->Particle.GetObject();
 	}
+
+	Muon* GetMuon() { return Mu };
+	Electron* GetElectron() { return Elec };
 };
 
 Bool_t CompareLepton( MyLepton* Lepton1, MyLepton* Lepton2 )
@@ -842,4 +845,27 @@ Bool_t Matching_RECO_GENMuonHPFS( vector<GenParticle*> vec_Lepton_FinalState, ve
 		Flag_Success = kTRUE;
 
 	return Flag_Success;
+}
+
+vector< MyLepton* > MakeVector_MyLepton( TClonesArray* Br_Electron, TClonesArray* Br_Muon )
+{
+	vector< MyLepton* > vec_MyLepton;
+
+	Int_t nElec = Br_Electron->GetEntriesFast();
+	for(Int_t i_elec=0; i_elec<nElec; i_elec++)
+	{
+		Electron* RecoElec = (Electron*)Br_Electron->At(i_elec);
+		MyLepton *RecoLepton = new MyLepton( RecoElec );
+		vec_MyLepton.push_back( RecoLepton );
+	}
+
+	Int_t nMuon = Br_Muon->GetEntriesFast();
+	for(Int_t i_mu=0; i_mu<nMuon; i_mu++)
+	{
+		Muon* RecoMu = (Muon*)Br_Muon->At(i_mu);
+		MyLepton *RecoLepton = new MyLepton( RecoMu );
+		vec_MyLepton.push_back( RecoLepton );
+	}
+
+	return vec_MyLepton;
 }
