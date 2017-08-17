@@ -2,7 +2,7 @@ import os
 import sys
 import time
 
-CodeName = sys.argv[0]
+CodeName = sys.argv[1]
 print "CodeName: %s" % CodeName
 
 TIME = time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time()))
@@ -63,7 +63,7 @@ for SamplePath in List_SamplePath:
 
 	Flag_IsSignal = 1
 	if "ZZto4L" in SampleType: Flag_IsSignal = 0
-	cmd_ROOT = '.x \'%s("%s", "%s", %d)++\'' % (CodeName, SamplePath, SampleType, Flag_IsSignal)
+	cmd_ROOT = '.x %s++("%s", "%s", %d)' % (CodeName, SamplePath, SampleType, Flag_IsSignal)
 
 	f_temp = open(ScriptName, "w");
 	f_temp.write("""
@@ -79,12 +79,12 @@ gSystem->Load(DelphesPath+"/libDelphes.so")
 
 EOF
 
-echo "finished
+echo "finished"
 	""" % cmd_ROOT)
 	f_temp.close()
 
 	cmd_cd = "cd %s" % SubDirPath
-	cmd_script = "source %s >&log&" % ScriptName
+	cmd_script = "source %s >&../log_%s&" % (ScriptName, SampleType)
 	cmd_cd_backToCWD = 'cd %s' % cwd
 
 	f.write( "%s\n" % cmd_cd )
@@ -95,3 +95,5 @@ echo "finished
 
 f.write('echo "Submission is finished"\n\n')
 f.close()
+
+print "Working directory is made: %s" % MainDir
