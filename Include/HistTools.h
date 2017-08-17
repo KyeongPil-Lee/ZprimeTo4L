@@ -108,8 +108,8 @@ public:
 		this->GenLepton = (GenParticle*)_Electron->Particle.GetObject();
 	}
 
-	Muon* GetMuon() { return Mu };
-	Electron* GetElectron() { return Elec };
+	Muon* GetMuon() { return Mu; }
+	Electron* GetElectron() { return Elec; }
 };
 
 Bool_t CompareLepton( MyLepton* Lepton1, MyLepton* Lepton2 )

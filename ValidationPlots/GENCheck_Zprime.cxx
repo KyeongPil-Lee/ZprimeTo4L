@@ -26,12 +26,14 @@
 class Analyzer
 {
 public:
-	TString InputFileName;
+	TString SamplePath;
+	TString SampleType;
 	Bool_t Flag_IsSignal;
 
-	Analyzer( TString _InputFileName )
+	Analyzer( TString _SamplePath, TString _SampleType )
 	{
-		this->InputFileName = _InputFileName;
+		this->SamplePath = _SamplePath;
+		this->SampleType = _SampleType;
 		Flag_IsSignal = kFALSE; // -- initial value -- //
 	}
 
@@ -43,7 +45,7 @@ public:
 	void Analyze()
 	{
 		TChain* chain = new TChain("Delphes");
-		chain->Add(this->InputFileName);
+		chain->Add(this->SamplePath);
 
 		// Create object of class ExRootTreeReader
 		ExRootTreeReader *treeReader = new ExRootTreeReader(chain);
@@ -71,17 +73,18 @@ public:
 
 			vector< GenParticle* > vec_Lepton_HardProcess_temp;
 			Bool_t isFound_Zprime = kFALSE;
+			Int_t nGenParticle = Br_GenParticle->GetEntriesFast();
 			for(Int_t i_gen=0; i_gen<nGenParticle; i_gen++)
 			{
 				GenParticle* GenPar = (GenParticle*)Br_GenParticle->At(i_gen);
 				if( GenPar->PID == 1000623) // -- Z' -- //
 				{
 					isFound_Zprime = kTRUE;
-					nEvent_WithZprime++;
 				}
 			}
 
-			if( !isFound_Zprime )
+			if( isFound_Zprime ) nEvent_WithZprime++;
+			else
 			{
 				nEvent_WithoutZprime++;
 
@@ -89,7 +92,7 @@ public:
 				for(Int_t i_gen=0; i_gen<nGenParticle; i_gen++)
 				{
 					GenParticle* GenPar = (GenParticle*)Br_GenParticle->At(i_gen);
-					if( fabs(GenPar->PID) == 1000600) // -- phi -- //
+					if( fabs(GenPar->PID) == 1000600 && GenPar->Status == 22 ) // -- phi, hard process -- //
 					{
 						Int_t MotherID = GetMotherID( GenPar, Br_GenParticle );
 						cout << "\tPhi (" << GenPar->PID << "): Mother ID = " << MotherID << endl;
@@ -105,11 +108,9 @@ public:
 	}
 };
 
-void GENCheck_Zprime()
+void GENCheck_Zprime( TString SamplePath, TString SampleType, Bool_t Flag_IsSignal )
 {
-	TString DataPath = gSystem->Getenv("KP_DATA_PATH");
-	TString InputFileName_Signal = DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_200_Msn3_1_200k.root";
-	Analyzer *analyzer = new Analyzer(InputFileName_Signal);
-	analyzer->IsSignal( kTRUE );
+	Analyzer *analyzer = new Analyzer(SamplePath, SampleType);
+	analyzer->IsSignal( Flag_IsSignal );
 	analyzer->Analyze();
 }
