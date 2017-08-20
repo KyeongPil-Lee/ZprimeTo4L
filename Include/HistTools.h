@@ -13,6 +13,11 @@ Bool_t CompareElectron( Electron* Electron1, Electron* Electron2 )
 	return Electron1->PT > Electron2->PT;
 }
 
+Bool_t CompareMyLepton( MyLepton* MyLepton1, MyLepton* MyLepton2 )
+{
+	return MyLepton1->Pt > MyLepton2->Pt;
+}
+
 class MyGenPair
 {
 public:
@@ -60,6 +65,8 @@ public:
 	Double_t Eta;
 	Double_t Phi;
 	TLorentzVector LVec_P;
+	Double_t Charge;
+	Double_t RelIso;
 
 	Bool_t isMu;
 	Muon *Mu;
@@ -74,6 +81,9 @@ public:
 		this->Eta = 0;
 		this->Phi = 0;
 		this->LVec_P.SetPxPyPzE(0,0,0,0);
+
+		this->Charge = -999;
+		this->RelIso = -1;
 
 		this->isMu = kFALSE;
 		this->Mu = NULL;
@@ -91,6 +101,9 @@ public:
 		this->Phi = _Muon->Phi;
 		this->LVec_P = _Muon->P4();
 
+		this->Charge = _Muon->Charge;
+		this->RelIso = _Muon->IsolationVar;
+
 		this->isMu = kTRUE;
 		this->Mu = _Muon;
 		this->GenLepton = (GenParticle*)_Muon->Particle.GetObject();
@@ -102,6 +115,10 @@ public:
 		this->Eta = _Electron->Eta;
 		this->Phi = _Electron->Phi;
 		this->LVec_P = _Electron->P4();
+
+		this->Charge = _Electron->Charge;
+		this->RelIso = _Electron->IsolationVar;
+
 
 		this->isElec = kTRUE;
 		this->Elec = _Electron;
@@ -127,6 +144,9 @@ public:
 	Double_t Pt;
 	Double_t Rap;
 	TLorentzVector LVec_P;
+
+	Bool_t Flag_SameFlavor;
+	Bool_t Flag_OS;
 
 	MyGenPair* GENPair_postFSR;
 
@@ -157,10 +177,129 @@ public:
 		this->Pt = this->LVec_P.Pt();
 		this->Rap = this->LVec_P.Rapidity();
 
+		this->Flag_OS = kFALSE;
+		if( First->Charge != Second->Charge ) this->Flag_OS = kTRUE;
+
+		this->Flag_SameFlavor = kFALSE;
+		if( (First->isMu && Second->isMu) || (First->isElec && Second->isElec) ) this->Flag_SameFlavor = kTRUE;
+
 		// -- matched Gen-pair @ post-FSR level (final state) -- //
 		GenParticle* GenLepton1 = this->First->GenLepton;
 		GenParticle* GenLepton2 = this->Second->GenLepton;
 		this->GENPair_postFSR = new MyGenPair( GenLepton1, GenLepton2 );
+	}
+};
+
+class My4LeptonPair
+{
+public:
+	vector< MyLepton* > vec_Lepton;
+	MyLepton *First;
+	MyLepton *Second;
+	MyLepton *Third;
+	MyLepton *Fourth;
+
+	Double_t M;
+	Double_t Pt;
+	Double_t Rap;
+	TLorentzVector LVec_P;
+
+	TString FlavorType;
+
+	My4LeptonPair( MyLepton* Lepton1, MyLepton* Lepton2, MyLepton* Lepton3, MyLepton* Lepton4 )
+	{
+		this->vec_Lepton.push_back( Lepton1 );
+		this->vec_Lepton.push_back( Lepton2 );
+		this->vec_Lepton.push_back( Lepton3 );
+		this->vec_Lepton.push_back( Lepton4 );
+
+		std::sort( vec_Lepton.begin(), vec_Lepton.end(), CompareLepton );
+		this->First = vec_Lepton[0];
+		this->Second = vec_Lepton[1];
+		this->Third = vec_Lepton[2];
+		this->Fourth = vec_Lepton[3];
+
+		this->Calc_Var();
+	}
+
+	void Calc_Var()
+	{
+		TLorentzVector LVec_First = First->LVec_P;
+		TLorentzVector LVec_Second = Second->LVec_P;
+		TLorentzVector LVec_Third = Third->LVec_P;
+		TLorentzVector LVec_Fourth = Fourth->LVec_P;
+		this->LVec_P = LVec_First + LVec_Second + LVec_Third + LVec_Fourth;
+
+		this->M = this->LVec_P.M();
+		this->Pt = this->LVec_P.Pt();
+		this->Rap = this->LVec_P.Rapidity();
+
+		// -- decide the flavor type: ex> 4m -- //
+		Int_t nMu = 0;
+		Int_t nElec = 0;
+		for(const auto & lepton : this->vec_Lepton )
+		{
+			if( lepton->isMu ) nMu++;
+			if( lepton->isElec ) nElec++;
+		}
+		if( nMu == 4 ) this->FlavorType = "4m";
+		else if( nMu == 3 && nElec == 1) this->FlavorType = "1e3m";
+		else if( nMu == 2 && nElec == 2) this->FlavorType = "2e2m";
+		else if( nMu == 1 && nElec == 3) this->FlavorType = "3e2m";
+		else if( nElec == 4) this->FlavorType = "4e";
+		else
+		{
+			cout << "# mu: " << nMu << ", # elec: " << nElec << " -> there's no corresponding flavor type" << endl;
+			this->FlavorType = "None";
+		}
+	}
+
+	Bool_t Test_Acc( Double_t PtCut_1st, PtCut_2nd, PtCut_3rd, PtCut_4th, EtaCut_1st, EtaCut_2nd, EtaCut_3rd, EtaCut_4th )
+	{
+		Bool_t Flag_PassAcc = kFALSE;
+		if( this->First->Pt > PtCut_1st && fabs(this->First->Eta) < EtaCut_1st &&
+			this->Second->Pt > PtCut_2nd && fabs(this->Second->Eta) < EtaCut_2nd &&
+			this->Third->Pt > PtCut_3rd && fabs(this->Third->Eta) < EtaCut_3rd &&
+			this->Fourth->Pt > PtCut_4th && fabs(this->Fourth->Eta) < EtaCut_4th
+			)
+			Flag_PassAcc = kTRUE;
+
+		return Flag_PassAcc;
+	}
+
+	Bool_t Test_PassZVeto( Double_t ZMass_min = 89, Double_t ZMass_max = 93 )
+	{
+		Bool_t Flag_PassZVeto = kTRUE; // -- default: true, and it will be changed if a lepton pair close to Z mass is found -- //
+
+		// -- search for all possible pair -- //
+		for(Int_t i_lep=0; i_lep<nLepton; i_lep++)
+		{
+			MyLepton *Lepton_ith = this->vec_Lepton[i_lep];
+			for(Int_t j_lep=i_lep+1, j_lep<nLepton; j_lep++)
+			{
+				MyLepton* Lepton_jth = this->vec_Lepton[j_lep];
+
+				MyLeptonPair *LepPair = new MyLeptonPair( Lepton_ith[0], Lepton_jth[1] );
+				if( LepPair->Flag_SameFlavor && LepPair->Flag_OS ) // -- only check same flavor, opposite sign pair -- //
+				{
+					if( LepPair->M > ZMass_min && LepPair->M < ZMass_max ) Flag_PassZVeto = kFALSE;
+				}
+			}
+		}
+
+		return Flag_PassZVeto;
+	}
+
+	Bool_t Test_Isolation( Double_t IsoCut )
+	{
+		Bool_t Flag_PassIso = kFALSE;
+		if( this->First->RelIso < IsoCut &&
+			this->Second->RelIso < IsoCut &&
+			this->Third->RelIso < IsoCut &&
+			this->Fourth->RelIso < IsoCut )
+			Flag_PassIso = kTURE;
+
+		return Flag_PassIso;
 	}
 };
 
