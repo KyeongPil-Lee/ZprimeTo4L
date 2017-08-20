@@ -59,6 +59,7 @@ public:
 
 		Int_t nEvent_WithZprime = 0;
 		Int_t nEvent_WithoutZprime = 0;
+		Int_t nEvent_WithoutZprime_Channel[5] = {0};
 		// nTotEvent = 100;
 		for(Int_t i_ev = 0; i_ev < nTotEvent; i_ev++)
 		{
@@ -87,6 +88,11 @@ public:
 			else
 			{
 				nEvent_WithoutZprime++;
+				if( TStr_Channal == "4e" ) nEvent_WithoutZprime_Channel[0]++;
+				if( TStr_Channal == "3e1m" ) nEvent_WithoutZprime_Channel[1]++;
+				if( TStr_Channal == "2e2m" ) nEvent_WithoutZprime_Channel[2]++;
+				if( TStr_Channal == "1e3m" ) nEvent_WithoutZprime_Channel[3]++;
+				if( TStr_Channal == "4m" ) nEvent_WithoutZprime_Channel[4]++;
 
 				cout << "Event with no Z': ChannelType = " << TStr_Channal << endl;
 				for(Int_t i_gen=0; i_gen<nGenParticle; i_gen++)
@@ -104,8 +110,17 @@ public:
 
 		cout << "# events with Z': " << nEvent_WithZprime << endl;
 		cout << "# events without Z': " << nEvent_WithoutZprime << endl;
+		cout << "\t4e channel: " << nEvent_WithoutZprime_Channel[0] << endl;
+		cout << "\t3e1m channel: " << nEvent_WithoutZprime_Channel[1] << endl;
+		cout << "\t2e2m channel: " << nEvent_WithoutZprime_Channel[2] << endl;
+		cout << "\t1e3m channel: " << nEvent_WithoutZprime_Channel[3] << endl;
+		cout << "\t4m channel: " << nEvent_WithoutZprime_Channel[4] << endl;
+
 		cout << "# total events: " << nEvent_WithoutZprime + nEvent_WithZprime << endl;
+		cout << "Fraction of events without Z': " << (nEvent_WithoutZprime*100) / (nEvent_WithoutZprime + nEvent_WithZprime) << endl;
 	}
+
+
 };
 
 void GENCheck_Zprime( TString SamplePath, TString SampleType, Bool_t Flag_IsSignal )
