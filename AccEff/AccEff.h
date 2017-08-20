@@ -1,3 +1,27 @@
+#include <TChain.h>
+#include <TFile.h>
+#include <TH1D.h>
+#include <TH2D.h>
+#include <TLorentzVector.h>
+#include <TStopwatch.h>
+#include <TTimeStamp.h>
+#include <TString.h>
+#include <TLegend.h>
+#include <THStack.h>
+#include <TPad.h>
+#include <TCanvas.h>
+#include <TColor.h>
+#include <TAttMarker.h>
+#include <TF1.h>
+#include <TStyle.h>
+#include <TEfficiency.h>
+#include <TClonesArray.h>
+#include <TSystem.h>
+
+// -- Delphes -- //
+#include "classes/DelphesClasses.h"
+#include "external/ExRootAnalysis/ExRootTreeReader.h"
+
 #include <Include/HistTools.h>
 
 class HistContainer
@@ -19,14 +43,11 @@ public:
 
 	void Fill( TString Type_Channel )
 	{
-		switch( Type_Channel )
-		{
-			case "4e": this->h_4e->Fill( 0.5 ); break; // -- increase # content in the bin -- //
-			case "3e1m": this-h_3e1m->Fill( 0.5 ); break;
-			case "2e2m": this-h_2e2m->Fill( 0.5 ); break;
-			case "1e3m": this-h_1e3m->Fill( 0.5 ); break;
-			case "4m": this-h_4m->Fill( 0.5 ); break;
-		}
+		if( Type_Channel == "4e") this->h_4e->Fill( 0.5 ); // -- increase # content in the bin -- //
+		if( Type_Channel == "3e1m") this->h_3e1m->Fill( 0.5 );
+		if( Type_Channel == "2e2m") this->h_2e2m->Fill( 0.5 );
+		if( Type_Channel == "1e3m") this->h_1e3m->Fill( 0.5 );
+		if( Type_Channel == "4m") this->h_4m->Fill( 0.5 );
 	}
 
 	void Save( TFile *f_output )
@@ -51,7 +72,7 @@ protected:
 		this->h_1e3m = new TH1D("h_1e3m_"+this->Type, "", 1, 0, 1);
 		this->h_4m = new TH1D("h_4m_"+this->Type, "", 1, 0, 1);
 	}
-}
+};
 
 class Tool_AccEff
 {
@@ -60,7 +81,7 @@ public:
 	TString Name_Sample;
 	Bool_t Flag_IsSignal;
 
-	Tool_AccEff( TString _Path_Sample, Bool_t _Name_Sample, Bool_t _Flag_IsSignal )
+	Tool_AccEff( TString _Path_Sample, TString _Name_Sample, Bool_t _Flag_IsSignal )
 	{
 		this->Path_Sample = _Path_Sample;
 		this->Name_Sample = _Name_Sample;
@@ -74,7 +95,7 @@ public:
 		HistContainer* Hist_EffPass = new HistContainer("EffPass");
 
 		TChain* chain = new TChain("Delphes");
-		chain->Add(this->InputFileName);
+		chain->Add(this->Path_Sample);
 
 		// Create object of class ExRootTreeReader
 		ExRootTreeReader *treeReader = new ExRootTreeReader(chain);
@@ -86,7 +107,7 @@ public:
 		TClonesArray *Br_Electron = treeReader->UseBranch("Electron");
 		TClonesArray *Br_GenParticle = treeReader->UseBranch("Particle");
 
-		// nTotEvent = 100;
+		nTotEvent = 10000;
 		for(Int_t i_ev = 0; i_ev < nTotEvent; i_ev++)
 		{
 			treeReader->ReadEntry(i_ev);
@@ -110,64 +131,14 @@ public:
 				///////////////////////
 				// -- reco. level -- //
 				///////////////////////
-				vector< MyLepton* > vec_RECOLepton = this->MakeVector_MyLepton( Br_Electron, Br_Muon );
+				vector< MyLepton* > vec_RECOLepton = MakeVector_MyLepton( Br_Electron, Br_Muon );
 				Int_t nRECOLepton = vec_RECOLepton.size();
-				Flag Flag_PassSelection = this->Test_PassSelection( vec_RECOLepton, TStr_Channal );
+				Bool_t Flag_PassSelection = this->Test_PassSelection( vec_RECOLepton, TStr_Channal );
 				if( Flag_PassSelection )
 				{
 					Hist_EffPass->Fill( TStr_Channal );
 				}
-
-
-
-				// -- matching reco-level leptons and gen-level leptons from hard process final state one by one -- //
-				// Bool_t Flag_FullyMatched = kFALSE;
-				// vector< MyLepton* > vec_LeptonMatched;
-				// Int_t nRECOLepton = vec_RECOLepton.size();
-
-				// if( nRECOLepton >= 4 ) // -- at least 4 leptons should be available in the reco.level -- //
-				// 	Flag_FullyMatched = Matching_RECO_GENMuonHPFS( vec_GENLepton_FinalState, vec_RECOLepton, vec_LeptonMatched);
-
-				// if( Flag_FullyMatched ) // -- if "all" reco-lepton are matched, then histograms will be filled -- //
-				// {
-				// 	// -- pairing -- // 
-				// 	MyLeptonPair *LepPair1 = new MyLeptonPair( vec_LeptonMatched[0], vec_LeptonMatched[1] );
-				// 	MyLeptonPair *LepPair2 = new MyLeptonPair( vec_LeptonMatched[2], vec_LeptonMatched[3] );
-
-				// 	Hists->Fill_RECO( LepPair1, LepPair2 );
-				// }
-
 			}
-
-			// //////////////////////
-			// // -- gen. level -- //
-			// //////////////////////
-			// // -- signal: ordering is already adjusted to have same mother in vec_Lepton_HardProcess level -- //
-			// // -- bkg: no meaning: dimuon variable distribution will not be used -- //
-			// MyGenPair *GenPair1 = new MyGenPair( vec_GENLepton_FinalState[0],vec_GENLepton_FinalState[1] );
-			// MyGenPair *GenPair2 = new MyGenPair( vec_GENLepton_FinalState[2],vec_GENLepton_FinalState[3] );
-			// Hists->Fill_GEN( GenPair1, GenPair2 );
-
-			// ///////////////////////
-			// // -- reco. level -- //
-			// ///////////////////////
-			// vector< MyLepton* > vec_RECOLepton = this->MakeVector_MyLepton( Br_Electron, Br_Muon );
-
-			// // -- matching reco-level leptons and gen-level leptons from hard process final state one by one -- //
-			// Bool_t Flag_FullyMatched = kFALSE;
-			// vector< MyLepton* > vec_LeptonMatched;
-			// Int_t nRECOLepton = vec_RECOLepton.size();
-			// if( nRECOLepton >= 4 ) // -- at least 4 leptons should be available in the reco.level -- //
-			// 	Flag_FullyMatched = Matching_RECO_GENMuonHPFS( vec_GENLepton_FinalState, vec_RECOLepton, vec_LeptonMatched);
-
-			// if( Flag_FullyMatched ) // -- if "all" reco-lepton are matched, then histograms will be filled -- //
-			// {
-			// 	// -- pairing -- // 
-			// 	MyLeptonPair *LepPair1 = new MyLeptonPair( vec_LeptonMatched[0], vec_LeptonMatched[1] );
-			// 	MyLeptonPair *LepPair2 = new MyLeptonPair( vec_LeptonMatched[2], vec_LeptonMatched[3] );
-
-			// 	Hists->Fill_RECO( LepPair1, LepPair2 );
-			// }
 
 		} // -- end of event iteration -- //
 
@@ -186,10 +157,10 @@ protected:
 		Bool_t Flag = kFALSE;
 		std::sort( vec_GENLepton_FinalState.begin(), vec_GENLepton_FinalState.end(), CompareGenParticle );
 
-		if( vec_GENLepton_FinalState[0]->PT > 45 && fabs(vec_GENLepton_FinalState[0].Eta) < 2.4 &&
-			vec_GENLepton_FinalState[1]->PT > 45 && fabs(vec_GENLepton_FinalState[1].Eta) < 2.4 &&
-			vec_GENLepton_FinalState[2]->PT > 30 && fabs(vec_GENLepton_FinalState[2].Eta) < 2.4 &&
-			vec_GENLepton_FinalState[3]->PT > 30 && fabs(vec_GENLepton_FinalState[3].Eta) < 2.4
+		if( vec_GENLepton_FinalState[0]->PT > 45 && fabs(vec_GENLepton_FinalState[0]->Eta) < 2.4 &&
+			vec_GENLepton_FinalState[1]->PT > 45 && fabs(vec_GENLepton_FinalState[1]->Eta) < 2.4 &&
+			vec_GENLepton_FinalState[2]->PT > 30 && fabs(vec_GENLepton_FinalState[2]->Eta) < 2.4 &&
+			vec_GENLepton_FinalState[3]->PT > 30 && fabs(vec_GENLepton_FinalState[3]->Eta) < 2.4
 			)
 			Flag = kTRUE;
 
@@ -198,7 +169,7 @@ protected:
 
 	Bool_t Test_PassSelection( vector<MyLepton*> vec_RECOLepton, TString TStr_Channal )
 	{
-		Bool_t Flag = kFALSE:
+		Bool_t Flag = kFALSE;
 
 		// -- make all possible 4 lepton candidate -- //
 		Int_t nLepton = (Int_t)vec_RECOLepton.size();
@@ -233,4 +204,4 @@ protected:
 
 		return Flag;
 	}
-}
+};

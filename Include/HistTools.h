@@ -13,11 +13,6 @@ Bool_t CompareElectron( Electron* Electron1, Electron* Electron2 )
 	return Electron1->PT > Electron2->PT;
 }
 
-Bool_t CompareMyLepton( MyLepton* MyLepton1, MyLepton* MyLepton2 )
-{
-	return MyLepton1->Pt > MyLepton2->Pt;
-}
-
 class MyGenPair
 {
 public:
@@ -245,7 +240,7 @@ public:
 		if( nMu == 4 ) this->FlavorType = "4m";
 		else if( nMu == 3 && nElec == 1) this->FlavorType = "1e3m";
 		else if( nMu == 2 && nElec == 2) this->FlavorType = "2e2m";
-		else if( nMu == 1 && nElec == 3) this->FlavorType = "3e2m";
+		else if( nMu == 1 && nElec == 3) this->FlavorType = "3e1m";
 		else if( nElec == 4) this->FlavorType = "4e";
 		else
 		{
@@ -254,7 +249,8 @@ public:
 		}
 	}
 
-	Bool_t Test_Acc( Double_t PtCut_1st, PtCut_2nd, PtCut_3rd, PtCut_4th, EtaCut_1st, EtaCut_2nd, EtaCut_3rd, EtaCut_4th )
+	Bool_t Test_Acc( Double_t PtCut_1st, Double_t PtCut_2nd, Double_t PtCut_3rd, Double_t PtCut_4th,
+					 Double_t EtaCut_1st, Double_t EtaCut_2nd, Double_t EtaCut_3rd, Double_t EtaCut_4th )
 	{
 		Bool_t Flag_PassAcc = kFALSE;
 		if( this->First->Pt > PtCut_1st && fabs(this->First->Eta) < EtaCut_1st &&
@@ -272,14 +268,15 @@ public:
 		Bool_t Flag_PassZVeto = kTRUE; // -- default: true, and it will be changed if a lepton pair close to Z mass is found -- //
 
 		// -- search for all possible pair -- //
+		const Int_t nLepton = 4;
 		for(Int_t i_lep=0; i_lep<nLepton; i_lep++)
 		{
 			MyLepton *Lepton_ith = this->vec_Lepton[i_lep];
-			for(Int_t j_lep=i_lep+1, j_lep<nLepton; j_lep++)
+			for(Int_t j_lep=i_lep+1; j_lep<nLepton; j_lep++)
 			{
 				MyLepton* Lepton_jth = this->vec_Lepton[j_lep];
 
-				MyLeptonPair *LepPair = new MyLeptonPair( Lepton_ith[0], Lepton_jth[1] );
+				MyLeptonPair *LepPair = new MyLeptonPair( Lepton_ith, Lepton_jth );
 				if( LepPair->Flag_SameFlavor && LepPair->Flag_OS ) // -- only check same flavor, opposite sign pair -- //
 				{
 					if( LepPair->M > ZMass_min && LepPair->M < ZMass_max ) Flag_PassZVeto = kFALSE;
@@ -297,7 +294,7 @@ public:
 			this->Second->RelIso < IsoCut &&
 			this->Third->RelIso < IsoCut &&
 			this->Fourth->RelIso < IsoCut )
-			Flag_PassIso = kTURE;
+			Flag_PassIso = kTRUE;
 
 		return Flag_PassIso;
 	}

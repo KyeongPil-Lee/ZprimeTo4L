@@ -9,7 +9,7 @@ TIME = time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time()))
 
 DataPath = os.environ['KP_DATA_PATH']
 List_SamplePath = [
-# DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/ZZto4L0j_1M.root",
+DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/ZZto4L0j_1M.root",
 
 DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_200_Msn3_1_200k.root",
 DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_200_Msn3_50_200k.root",
@@ -19,23 +19,23 @@ DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_800_Msn3_50_200k.root",
 
 DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_1000_Msn3_10_200k.root",
 DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_1000_Msn3_50_200k.root",
-# DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_1000_Msn3_300_200k.root",
+DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_1000_Msn3_300_200k.root",
 
 DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_2000_Msn3_1_200k.root",
-# DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_2000_Msn3_20_200k.root",
+DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_2000_Msn3_20_200k.root",
 DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_2000_Msn3_50_200k.root",
-# DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_2000_Msn3_600_200k.root",
+DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_2000_Msn3_600_200k.root",
 
 
 DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_3000_Msn3_1_200k.root",
-# DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_3000_Msn3_30_200k.root",
+DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_3000_Msn3_30_200k.root",
 DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_3000_Msn3_50_200k.root",
-# DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_3000_Msn3_900_200k.root",
+DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_3000_Msn3_900_200k.root",
 
 DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_4000_Msn3_1_200k.root",
-# DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_4000_Msn3_40_200k.root",
+DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_4000_Msn3_40_200k.root",
 DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_4000_Msn3_50_200k.root",
-# DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_4000_Msn3_1200_200k.root"
+DataPath+"/Delphes/v20170720_1st_DetSim_Delphes_200k/MZp_4000_Msn3_1200_200k.root"
 ]
 
 if "Local" not in os.listdir("."):
