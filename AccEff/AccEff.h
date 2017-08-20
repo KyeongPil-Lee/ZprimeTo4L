@@ -107,7 +107,7 @@ public:
 		TClonesArray *Br_Electron = treeReader->UseBranch("Electron");
 		TClonesArray *Br_GenParticle = treeReader->UseBranch("Particle");
 
-		nTotEvent = 10000;
+		// nTotEvent = 10000;
 		for(Int_t i_ev = 0; i_ev < nTotEvent; i_ev++)
 		{
 			treeReader->ReadEntry(i_ev);
