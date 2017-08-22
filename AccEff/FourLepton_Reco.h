@@ -43,7 +43,7 @@ public:
 
 	void Fill( My4LeptonPair* FourLPair_Selected, TString Type_Channel )
 	{
-		Double_t M = FourLPair_Selected->M();
+		Double_t M = FourLPair_Selected->M;
 		if( Type_Channel == "4e") this->h_4e->Fill( M ); // -- increase # content in the bin -- //
 		if( Type_Channel == "3e1m") this->h_3e1m->Fill( M );
 		if( Type_Channel == "2e2m") this->h_2e2m->Fill( M );
@@ -131,7 +131,7 @@ public:
 				Int_t nRECOLepton = vec_RECOLepton.size();
 				My4LeptonPair* FourLPair_Selected = this->Test_PassSelection( vec_RECOLepton, TStr_Channal );
 
-				if( !FourLPair_Selected.isNull )
+				if( !FourLPair_Selected->isNull )
 					Hist->Fill( FourLPair_Selected, TStr_Channal );
 			}
 
@@ -165,7 +165,7 @@ protected:
 		My4LeptonPair* Pair_Returned;
 		Bool_t Flag = kFALSE;
 
-		vector< My4LeptonPair > vec_4LepPair;
+		vector< My4LeptonPair* > vec_4LepPair;
 
 		// -- make all possible 4 lepton candidate -- //
 		Int_t nLepton = (Int_t)vec_RECOLepton.size();
