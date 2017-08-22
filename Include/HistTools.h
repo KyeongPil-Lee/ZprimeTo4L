@@ -201,8 +201,13 @@ public:
 
 	TString FlavorType;
 
+	Bool_t isNull;
+
+	My4LeptonPair() { this->isNull = kTRUE; };
+
 	My4LeptonPair( MyLepton* Lepton1, MyLepton* Lepton2, MyLepton* Lepton3, MyLepton* Lepton4 )
 	{
+		this->isNull = kFALSE;
 		this->vec_Lepton.push_back( Lepton1 );
 		this->vec_Lepton.push_back( Lepton2 );
 		this->vec_Lepton.push_back( Lepton3 );
@@ -299,6 +304,11 @@ public:
 		return Flag_PassIso;
 	}
 };
+
+Bool_t Compare4LeptonPair( My4LeptonPair *pair1, My4LeptonPair *pair2 )
+{
+	return pair1->M > pair2->M;
+}
 
 class MyMuonPair
 {
