@@ -4,152 +4,152 @@ set nb_core 30
 generate_events
 	shower=PYTHIA8
 	set MZp 200
-	set WZp 0.0028
+	set WZp 0.028
 	set Msn3 1
-	set Wsn3 1.4e-05
-	set nevents 200000
-
-
-generate_events
-	shower=PYTHIA8
-	set MZp 200
-	set WZp 0.0028
-	set Msn3 50
-	set Wsn3 0.0007
-	set nevents 200000
-
-
-generate_events
-	shower=PYTHIA8
-	set MZp 800
-	set WZp 0.0112
-	set Msn3 1
-	set Wsn3 1.4e-05
-	set nevents 200000
-
-
-generate_events
-	shower=PYTHIA8
-	set MZp 800
-	set WZp 0.0112
-	set Msn3 50
-	set Wsn3 0.0007
-	set nevents 200000
-
-
-generate_events
-	shower=PYTHIA8
-	set MZp 1000
-	set WZp 0.014
-	set Msn3 10
 	set Wsn3 0.00014
 	set nevents 200000
 
 
 generate_events
 	shower=PYTHIA8
-	set MZp 1000
-	set WZp 0.014
+	set MZp 200
+	set WZp 0.028
 	set Msn3 50
-	set Wsn3 0.0007
+	set Wsn3 0.007
+	set nevents 200000
+
+
+generate_events
+	shower=PYTHIA8
+	set MZp 800
+	set WZp 0.112
+	set Msn3 1
+	set Wsn3 0.00014
+	set nevents 200000
+
+
+generate_events
+	shower=PYTHIA8
+	set MZp 800
+	set WZp 0.112
+	set Msn3 50
+	set Wsn3 0.007
 	set nevents 200000
 
 
 generate_events
 	shower=PYTHIA8
 	set MZp 1000
-	set WZp 0.014
+	set WZp 0.14
+	set Msn3 10
+	set Wsn3 0.0014
+	set nevents 200000
+
+
+generate_events
+	shower=PYTHIA8
+	set MZp 1000
+	set WZp 0.14
+	set Msn3 50
+	set Wsn3 0.007
+	set nevents 200000
+
+
+generate_events
+	shower=PYTHIA8
+	set MZp 1000
+	set WZp 0.14
 	set Msn3 300
+	set Wsn3 0.042
+	set nevents 200000
+
+
+generate_events
+	shower=PYTHIA8
+	set MZp 2000
+	set WZp 0.28
+	set Msn3 1
+	set Wsn3 0.00014
+	set nevents 200000
+
+
+generate_events
+	shower=PYTHIA8
+	set MZp 2000
+	set WZp 0.28
+	set Msn3 20
+	set Wsn3 0.0028
+	set nevents 200000
+
+
+generate_events
+	shower=PYTHIA8
+	set MZp 2000
+	set WZp 0.28
+	set Msn3 50
+	set Wsn3 0.007
+	set nevents 200000
+
+
+generate_events
+	shower=PYTHIA8
+	set MZp 2000
+	set WZp 0.28
+	set Msn3 600
+	set Wsn3 0.084
+	set nevents 200000
+
+
+generate_events
+	shower=PYTHIA8
+	set MZp 3000
+	set WZp 0.42
+	set Msn3 30
 	set Wsn3 0.0042
 	set nevents 200000
 
 
 generate_events
 	shower=PYTHIA8
-	set MZp 2000
-	set WZp 0.028
-	set Msn3 1
-	set Wsn3 1.4e-05
-	set nevents 200000
-
-
-generate_events
-	shower=PYTHIA8
-	set MZp 2000
-	set WZp 0.028
-	set Msn3 20
-	set Wsn3 0.00028
-	set nevents 200000
-
-
-generate_events
-	shower=PYTHIA8
-	set MZp 2000
-	set WZp 0.028
+	set MZp 3000
+	set WZp 0.42
 	set Msn3 50
-	set Wsn3 0.0007
-	set nevents 200000
-
-
-generate_events
-	shower=PYTHIA8
-	set MZp 2000
-	set WZp 0.028
-	set Msn3 600
-	set Wsn3 0.0084
+	set Wsn3 0.007
 	set nevents 200000
 
 
 generate_events
 	shower=PYTHIA8
 	set MZp 3000
-	set WZp 0.042
-	set Msn3 30
-	set Wsn3 0.00042
-	set nevents 200000
-
-
-generate_events
-	shower=PYTHIA8
-	set MZp 3000
-	set WZp 0.042
-	set Msn3 50
-	set Wsn3 0.0007
-	set nevents 200000
-
-
-generate_events
-	shower=PYTHIA8
-	set MZp 3000
-	set WZp 0.042
+	set WZp 0.42
 	set Msn3 900
-	set Wsn3 0.0126
+	set Wsn3 0.126
 	set nevents 200000
 
 
 generate_events
 	shower=PYTHIA8
 	set MZp 4000
-	set WZp 0.056
+	set WZp 0.56
 	set Msn3 40
-	set Wsn3 0.00056
+	set Wsn3 0.0056
 	set nevents 200000
 
 
 generate_events
 	shower=PYTHIA8
 	set MZp 4000
-	set WZp 0.056
+	set WZp 0.56
 	set Msn3 50
-	set Wsn3 0.0007
+	set Wsn3 0.007
 	set nevents 200000
 
 
 generate_events
 	shower=PYTHIA8
 	set MZp 4000
-	set WZp 0.056
+	set WZp 0.56
 	set Msn3 1200
-	set Wsn3 0.0168
+	set Wsn3 0.168
 	set nevents 200000
 

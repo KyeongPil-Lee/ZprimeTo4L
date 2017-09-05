@@ -1,7 +1,7 @@
 
 def Write_CMD( f, MZp, Msn3 ):
 	nEvent = 200000;
-	RelWidth = 0.0014 * 0.01 # -- 0.0014% -- //
+	RelWidth = 0.014 * 0.01 # -- 0.014% -- //
 	AbsWidth_Zp = MZp * RelWidth
 	AbsWidth_sn3 = Msn3 * RelWidth
 
