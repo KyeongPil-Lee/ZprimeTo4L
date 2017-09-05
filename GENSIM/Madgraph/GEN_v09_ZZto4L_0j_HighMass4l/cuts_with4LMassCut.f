@@ -110,6 +110,8 @@ c find the charged leptons (also used in the photon isolation cuts below)
          endif
       enddo
 
+      m4l=dot(p4l,p4l)
+
       mm4l=1000.0
       mm4lmax=10000.0
       if (mm4l.gt.0d0.or.mm4lmax.ge.0d0) then 
