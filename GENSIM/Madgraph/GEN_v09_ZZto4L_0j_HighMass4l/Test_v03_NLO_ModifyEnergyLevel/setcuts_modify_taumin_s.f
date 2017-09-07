@@ -524,7 +524,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c
 c If the lower bound found here is smaller than the hard bound,
 c simply set the soft bound equal to the hard bound.
-            taumin_s(iFKS,ichan)=max(taumin_s(iFKS,ichan),5000d0)
+            taumin_s(iFKS,ichan)=max(taumin_s(iFKS,ichan),400d0)
             taumin_s(iFKS,ichan)=
      &           max(taumin_j(iFKS,ichan),taumin_s(iFKS,ichan))
 c
