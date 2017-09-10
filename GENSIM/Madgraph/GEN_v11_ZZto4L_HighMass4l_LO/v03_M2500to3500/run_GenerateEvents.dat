@@ -1,3 +1,4 @@
+set automatic_html_opening False
 # set nb_core 20
 set nb_core 15
 
