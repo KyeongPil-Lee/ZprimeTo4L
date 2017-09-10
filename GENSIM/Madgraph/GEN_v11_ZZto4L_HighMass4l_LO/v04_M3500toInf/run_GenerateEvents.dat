@@ -1,0 +1,6 @@
+# set nb_core 20
+set nb_core 15
+
+generate_events
+	shower=PYTHIA8
+
