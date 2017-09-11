@@ -52,6 +52,85 @@ public:
 	}
 };
 
+class My4GenPair
+{
+public:
+	vector< GenParticle* > vec_GenParticle;
+	GenParticle *First;
+	GenParticle *Second;
+	GenParticle *Third;
+	GenParticle *Fourth;
+
+	Double_t M;
+	Double_t Pt;
+	Double_t Rap;
+	TLorentzVector LVec_P;
+
+	TString FlavorType;
+
+	Bool_t isNull;
+
+	My4GenPair() { this->isNull = kTRUE; };
+
+	My4GenPair( GenParticle* GenPar1, GenParticle* GenPar2, GenParticle* GenPar3, GenParticle* GenPar4 )
+	{
+		this->isNull = kFALSE;
+		this->vec_GenParticle.push_back( GenPar1 );
+		this->vec_GenParticle.push_back( GenPar2 );
+		this->vec_GenParticle.push_back( GenPar3 );
+		this->vec_GenParticle.push_back( GenPar4 );
+
+		std::sort( vec_GenParticle.begin(), vec_GenParticle.end(), CompareGenParticle );
+		this->First = vec_GenParticle[0];
+		this->Second = vec_GenParticle[1];
+		this->Third = vec_GenParticle[2];
+		this->Fourth = vec_GenParticle[3];
+
+		this->Calc_Var();
+	}
+
+	void Calc_Var()
+	{
+		TLorentzVector LVec_First = First->LVec_P;
+		TLorentzVector LVec_Second = Second->LVec_P;
+		TLorentzVector LVec_Third = Third->LVec_P;
+		TLorentzVector LVec_Fourth = Fourth->LVec_P;
+		this->LVec_P = LVec_First + LVec_Second + LVec_Third + LVec_Fourth;
+
+		this->M = this->LVec_P.M();
+		this->Pt = this->LVec_P.Pt();
+		this->Rap = this->LVec_P.Rapidity();
+
+		// -- decide the flavor type: ex> 4m -- //
+		Int_t nMu = 0;
+		Int_t nElec = 0;
+		for(const auto & GenPar : this->vec_GenParticle )
+		{
+			if( fabs(GenPar->PID) == 13 ) nMu++;
+			if( fabs(GenPar->PID) == 11 ) nElec++;
+		}
+		if( nMu == 4 ) this->FlavorType = "4m";
+		else if( nMu == 3 && nElec == 1) this->FlavorType = "1e3m";
+		else if( nMu == 2 && nElec == 2) this->FlavorType = "2e2m";
+		else if( nMu == 1 && nElec == 3) this->FlavorType = "3e1m";
+		else if( nElec == 4) this->FlavorType = "4e";
+		else this->FlavorType = "None";
+	}
+
+	Bool_t Test_Acc( Double_t PtCut_1st, Double_t PtCut_2nd, Double_t PtCut_3rd, Double_t PtCut_4th,
+					 Double_t EtaCut_1st, Double_t EtaCut_2nd, Double_t EtaCut_3rd, Double_t EtaCut_4th )
+	{
+		Bool_t Flag_PassAcc = kFALSE;
+		if( this->First->Pt > PtCut_1st && fabs(this->First->Eta) < EtaCut_1st &&
+			this->Second->Pt > PtCut_2nd && fabs(this->Second->Eta) < EtaCut_2nd &&
+			this->Third->Pt > PtCut_3rd && fabs(this->Third->Eta) < EtaCut_3rd &&
+			this->Fourth->Pt > PtCut_4th && fabs(this->Fourth->Eta) < EtaCut_4th
+			)
+			Flag_PassAcc = kTRUE;
+
+		return Flag_PassAcc;
+	}
+};
 
 class MyLepton
 {
@@ -194,6 +273,8 @@ public:
 	MyLepton *Third;
 	MyLepton *Fourth;
 
+	My4GenPair *GenPair;
+
 	Double_t M;
 	Double_t Pt;
 	Double_t Rap;
@@ -218,6 +299,12 @@ public:
 		this->Second = vec_Lepton[1];
 		this->Third = vec_Lepton[2];
 		this->Fourth = vec_Lepton[3];
+
+		this->GenPair = new My4GenPair(
+			this->First->Particle.GetObject(),
+			this->Second->Particle.GetObject(),
+			this->Third->Particle.GetObject(),
+			this->Fourth->Particle.GetObject(), );
 
 		this->Calc_Var();
 	}
@@ -385,6 +472,13 @@ public:
 		this->h_Mass->Fill( Mass, weight );
 	}
 
+	void Fill( My4GenPair* GenPair, Double_t weight = 1.0 )
+	{
+		this->h_Pt->Fill( GenPair->Pt, weight );
+		this->h_Rap->Fill( GenPair->Rap, weight );
+		this->h_Mass->Fill( GenPair->M, weight );
+	}
+
 	void Save( TFile *f_output )
 	{
 		f_output->cd();
@@ -418,6 +512,7 @@ public:
 		this->Init_Hist();
 	}
 
+	// -- fill by two pairs -- //
 	void Fill( MyLeptonPair* LeptonPair1, MyLeptonPair* LeptonPair2, Double_t weight = 1.0 )
 	{
 		TLorentzVector LVec_P_4Lep = LeptonPair1->LVec_P + LeptonPair2->LVec_P;
@@ -431,6 +526,19 @@ public:
 
 		this->h_Pt->Fill( Pt, weight );
 		this->h_Rap->Fill( Rap, weight );
+		this->h_Mass->Fill( Mass, weight );
+		this->h_RelDiff_Mass->Fill( RelDiff_Mass, weight );
+	}
+
+	// -- fill by 4LepPair -- //
+	void Fill( My4LeptonPair* LeptonPair, Double_t weight )
+	{
+		Double_t Mass = LeptonPair->M;
+		Double_t Mass_GEN = LeptonPair->GenPair->M;
+		Double_t RelDiff_Mass = (Mass - Mass_GEN) / Mass_GEN;
+
+		this->h_Pt->Fill( LeptonPair->Pt, weight );
+		this->h_Rap->Fill( LeptonPair->Rap, weight );
 		this->h_Mass->Fill( Mass, weight );
 		this->h_RelDiff_Mass->Fill( RelDiff_Mass, weight );
 	}
