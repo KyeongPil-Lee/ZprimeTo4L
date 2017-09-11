@@ -91,10 +91,10 @@ public:
 
 	void Calc_Var()
 	{
-		TLorentzVector LVec_First = First->LVec_P;
-		TLorentzVector LVec_Second = Second->LVec_P;
-		TLorentzVector LVec_Third = Third->LVec_P;
-		TLorentzVector LVec_Fourth = Fourth->LVec_P;
+		TLorentzVector LVec_First = First->P4();
+		TLorentzVector LVec_Second = Second->P4();
+		TLorentzVector LVec_Third = Third->P4();
+		TLorentzVector LVec_Fourth = Fourth->P4();
 		this->LVec_P = LVec_First + LVec_Second + LVec_Third + LVec_Fourth;
 
 		this->M = this->LVec_P.M();
@@ -121,10 +121,10 @@ public:
 					 Double_t EtaCut_1st, Double_t EtaCut_2nd, Double_t EtaCut_3rd, Double_t EtaCut_4th )
 	{
 		Bool_t Flag_PassAcc = kFALSE;
-		if( this->First->Pt > PtCut_1st && fabs(this->First->Eta) < EtaCut_1st &&
-			this->Second->Pt > PtCut_2nd && fabs(this->Second->Eta) < EtaCut_2nd &&
-			this->Third->Pt > PtCut_3rd && fabs(this->Third->Eta) < EtaCut_3rd &&
-			this->Fourth->Pt > PtCut_4th && fabs(this->Fourth->Eta) < EtaCut_4th
+		if( this->First->PT > PtCut_1st && fabs(this->First->Eta) < EtaCut_1st &&
+			this->Second->PT > PtCut_2nd && fabs(this->Second->Eta) < EtaCut_2nd &&
+			this->Third->PT > PtCut_3rd && fabs(this->Third->Eta) < EtaCut_3rd &&
+			this->Fourth->PT > PtCut_4th && fabs(this->Fourth->Eta) < EtaCut_4th
 			)
 			Flag_PassAcc = kTRUE;
 
@@ -301,10 +301,10 @@ public:
 		this->Fourth = vec_Lepton[3];
 
 		this->GenPair = new My4GenPair(
-			this->First->Particle.GetObject(),
-			this->Second->Particle.GetObject(),
-			this->Third->Particle.GetObject(),
-			this->Fourth->Particle.GetObject(), );
+			this->First->GenLepton,
+			this->Second->GenLepton,
+			this->Third->GenLepton,
+			this->Fourth->GenLepton );
 
 		this->Calc_Var();
 	}

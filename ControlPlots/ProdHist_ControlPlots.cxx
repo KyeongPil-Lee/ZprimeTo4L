@@ -113,14 +113,11 @@ public:
 
 				if( ChannelType == TStr_Channal )
 				{
-					vector< HistContainer_4GENLepton* > vec_GENHist_4LepHS;
-					vector< HistContainer_4GENLepton* > vec_GENHist_4Lep;
-
-					vec_GENHist_4LepHS->Fill( FourGenPair_HS, weight );
-					vec_GENHist_4Lep->Fill( FourGenPair_FS, weight );
+					vec_GENHist_4LepHS[i]->Fill( FourGenPair_HS, weight );
+					vec_GENHist_4Lep[i]->Fill( FourGenPair_FS, weight );
 
 					if( Flag_PassSelection )
-						vec_RECOHist_4Lep->Fill( SelectedPair, weight );
+						vec_RECOHist_4Lep[i]->Fill( SelectedPair, weight );
 
 					break;
 				}
@@ -186,7 +183,7 @@ protected:
 						if( Flag_Acc && Flag_PassZVeto && Flag_PassIso )
 						{
 							Flag = kTRUE;
-							vec_SelectedPair.push_back( My4LeptonPair );
+							vec_SelectedPair.push_back( FourLPair );
 						}
 					} // -- l-th lepton iteration -- //
 				} // -- k-th lepton iteration -- //
@@ -195,13 +192,13 @@ protected:
 
 		if( Flag == kFALSE )
 		{
-			My4LeptonPair *GenPair_temp = My4LeptonPair(); // -- dummy -- //
+			My4LeptonPair *GenPair_temp = new My4LeptonPair(); // -- dummy -- //
 			vec_SelectedPair.push_back( GenPair_temp );
 		}
 		else // -- pass the selection -- //
 		{
 			if( vec_SelectedPair.size() > 1 )
-				Compare4LeptonPair( vec_SelectedPair.begin(), Compare4LeptonPair.end(), Compare4LeptonPair );
+				std::sort( vec_SelectedPair.begin(), vec_SelectedPair.end(), Compare4LeptonPair );
 		}
 
 		return vec_SelectedPair[0];
