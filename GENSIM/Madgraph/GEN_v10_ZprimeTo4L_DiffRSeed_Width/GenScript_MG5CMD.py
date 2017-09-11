@@ -20,16 +20,18 @@ generate_events
 # -- main part -- #
 
 Scenarios_Msn3 = {}
-Scenarios_Msn3[200] = [1, 50]
-Scenarios_Msn3[800] = [1, 50]
-Scenarios_Msn3[1000] = [10, 50, 300]
-Scenarios_Msn3[2000] = [1, 20, 50, 600]
-Scenarios_Msn3[3000] = [30, 50, 900]
-Scenarios_Msn3[4000] = [40, 50, 1200]
+# Scenarios_Msn3[200] = [1, 50]
+# Scenarios_Msn3[800] = [1, 50]
+# Scenarios_Msn3[1000] = [10, 50, 300]
+# Scenarios_Msn3[2000] = [1, 20, 50, 600]
+# Scenarios_Msn3[3000] = [30, 50, 900]
+# Scenarios_Msn3[4000] = [40, 50, 1200]
+Scenarios_Msn3[3000] = [1]
+Scenarios_Msn3[4000] = [1]
 
 f = open("run_GenerateEvents.dat", "w")
 f.write("set automatic_html_opening False\n")
-f.write("set nb_core 30\n")
+f.write("set nb_core 10\n")
 
 List_MZp = Scenarios_Msn3.keys()
 List_MZp.sort()
