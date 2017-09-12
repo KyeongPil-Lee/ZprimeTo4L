@@ -11,7 +11,7 @@ DataPath = os.environ['KP_DATA_PATH']
 BasePath = DataPath + "/Zprime4LSamples/v20170911_1st_DiffSeed_Width"
 
 List_SamplePath = [
-BasePath+"/ZZto4L_1M.root",
+# BasePath+"/ZZto4L_1M.root",
 
 # BasePath+"/MZp_200_Msn3_1_200k.root",
 # BasePath+"/MZp_200_Msn3_50_200k.root",
@@ -28,13 +28,12 @@ BasePath+"/ZZto4L_1M.root",
 # BasePath+"/MZp_2000_Msn3_50_200k.root",
 # BasePath+"/MZp_2000_Msn3_600_200k.root",
 
-
-# BasePath+"/MZp_3000_Msn3_1_200k.root",
+BasePath+"/MZp_3000_Msn3_1_200k.root",
 # BasePath+"/MZp_3000_Msn3_30_200k.root",
 # BasePath+"/MZp_3000_Msn3_50_200k.root",
 # BasePath+"/MZp_3000_Msn3_900_200k.root",
 
-# BasePath+"/MZp_4000_Msn3_1_200k.root",
+BasePath+"/MZp_4000_Msn3_1_200k.root",
 # BasePath+"/MZp_4000_Msn3_40_200k.root",
 # BasePath+"/MZp_4000_Msn3_50_200k.root",
 # BasePath+"/MZp_4000_Msn3_1200_200k.root"
