@@ -12,35 +12,35 @@ BasePath = DataPath + "/Zprime4LSamples/v20170911_1st_DiffSeed_Width"
 
 List_SamplePath = [
 # BasePath+"/ZZto4L_1M.root",
-BasePath+"/nEvent_10k/ZZto4L_M500to1500.root",
-BasePath+"/nEvent_10k/ZZto4L_M1500to2500.root",
-BasePath+"/nEvent_10k/ZZto4L_M2500to3500.root",
-BasePath+"/nEvent_10k/ZZto4L_M3500toInf.root",
+BasePath+"/ZZto4L_M500to1500.root",
+BasePath+"/ZZto4L_M1500to2500.root",
+BasePath+"/ZZto4L_M2500to3500.root",
+BasePath+"/ZZto4L_M3500toInf.root",
 
 # BasePath+"/MZp_200_Msn3_1_200k.root",
 # BasePath+"/MZp_200_Msn3_50_200k.root",
 
 # BasePath+"/MZp_800_Msn3_1_200k.root",
-BasePath+"/MZp_800_Msn3_50_200k.root",
+# BasePath+"/MZp_800_Msn3_50_200k.root",
 
 # BasePath+"/MZp_1000_Msn3_10_200k.root",
-BasePath+"/MZp_1000_Msn3_50_200k.root",
+# BasePath+"/MZp_1000_Msn3_50_200k.root",
 # BasePath+"/MZp_1000_Msn3_300_200k.root",
 
 # BasePath+"/MZp_2000_Msn3_1_200k.root",
 # BasePath+"/MZp_2000_Msn3_20_200k.root",
-BasePath+"/MZp_2000_Msn3_50_200k.root",
+# BasePath+"/MZp_2000_Msn3_50_200k.root",
 # BasePath+"/MZp_2000_Msn3_600_200k.root",
 
 
 # BasePath+"/MZp_3000_Msn3_1_200k.root",
 # BasePath+"/MZp_3000_Msn3_30_200k.root",
-BasePath+"/MZp_3000_Msn3_50_200k.root",
+# BasePath+"/MZp_3000_Msn3_50_200k.root",
 # BasePath+"/MZp_3000_Msn3_900_200k.root",
 
 # BasePath+"/MZp_4000_Msn3_1_200k.root",
 # BasePath+"/MZp_4000_Msn3_40_200k.root",
-BasePath+"/MZp_4000_Msn3_50_200k.root",
+# BasePath+"/MZp_4000_Msn3_50_200k.root",
 # BasePath+"/MZp_4000_Msn3_1200_200k.root"
 ]
 
