@@ -1,0 +1,17 @@
+{
+	"CodeName": "ProdHist_ControlPlots.cxx",
+	"List_SampleInfo":
+	[
+		{
+			"isSignal": 0,
+			"Tag": "ZZto4L_M3500to4000",
+			"SubPath": "Zprime4LSamples/v20170911_1st_DiffSeed_Width/ZZto4L_M3500to4000.root"
+		},
+
+		{
+			"isSignal": 0,
+			"Tag": "ZZto4L_M4000to4500",
+			"SubPath": "Zprime4LSamples/v20170911_1st_DiffSeed_Width/ZZto4L_M4000to4500.root"
+		}
+	]
+}

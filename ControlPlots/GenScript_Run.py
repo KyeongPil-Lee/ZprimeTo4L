@@ -1,76 +1,44 @@
-import os
-import sys
-import time
+import os, sys, time, json
 
-CodeName = sys.argv[1]
+JSONFileName = sys.argv[1]
+print "[JSONFileName]", JSONFileName
+with open(JSONFileName) as JobInfo_File:
+	JobInfo = json.load(JobInfo_File)
+
+CodeName = JobInfo["CodeName"]
 print "CodeName: %s" % CodeName
 
 TIME = time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time()))
 
-DataPath = os.environ['KP_DATA_PATH']
-BasePath = DataPath + "/Zprime4LSamples/v20170911_1st_DiffSeed_Width"
-
-List_SamplePath = [
-# BasePath+"/ZZto4L_1M.root",
-# BasePath+"/ZZto4L_M500to1500.root",
-# BasePath+"/ZZto4L_M1500to2500.root",
-# BasePath+"/ZZto4L_M2500to3500.root",
-# BasePath+"/ZZto4L_M3500toInf.root",
-BasePath+"/ZZto4L_M2500to5000.root",
-BasePath+"/ZZto4L_M3500to4500.root",
-
-# BasePath+"/MZp_200_Msn3_1_200k.root",
-# BasePath+"/MZp_200_Msn3_50_200k.root",
-
-# BasePath+"/MZp_800_Msn3_1_200k.root",
-# BasePath+"/MZp_800_Msn3_50_200k.root",
-
-# BasePath+"/MZp_1000_Msn3_10_200k.root",
-# BasePath+"/MZp_1000_Msn3_50_200k.root",
-# BasePath+"/MZp_1000_Msn3_300_200k.root",
-
-# BasePath+"/MZp_2000_Msn3_1_200k.root",
-# BasePath+"/MZp_2000_Msn3_20_200k.root",
-# BasePath+"/MZp_2000_Msn3_50_200k.root",
-# BasePath+"/MZp_2000_Msn3_600_200k.root",
-
-
-# BasePath+"/MZp_3000_Msn3_1_200k.root",
-# BasePath+"/MZp_3000_Msn3_30_200k.root",
-# BasePath+"/MZp_3000_Msn3_50_200k.root",
-# BasePath+"/MZp_3000_Msn3_900_200k.root",
-
-# BasePath+"/MZp_4000_Msn3_1_200k.root",
-# BasePath+"/MZp_4000_Msn3_40_200k.root",
-# BasePath+"/MZp_4000_Msn3_50_200k.root",
-# BasePath+"/MZp_4000_Msn3_1200_200k.root"
-]
+DataPathBase = os.environ['KP_DATA_PATH']
 
 if "Local" not in os.listdir("."):
 	os.mkdir( "Local" )
 
 cwd = os.getcwd()
 
-f = open("Run.sh", "w")
-f.write("#!bin/bash\n\n")
-
 CodeType = CodeName.split(".cxx")[0]
 MainDir = "Local/%s_v%s" % (CodeType, TIME)
 os.mkdir( MainDir )
 
+f = open("%s/Run.sh" % MainDir, "w")
+f.write("#!bin/bash\n\n")
+
 ScriptName = "Run_%s.sh" % CodeType # -- will be used later -- #
 
-for SamplePath in List_SamplePath:
-	SampleType = SamplePath.split("/")[-1].split(".root")[0]
+for SampleInfo in JobInfo["List_SampleInfo"]:
+	SampleType = SampleInfo["Tag"]
+	SamplePath = "%s/%s" % (DataPathBase, SampleInfo["SubPath"])
+	Flag_IsSignal = SampleInfo["isSignal"]
+
 	SubDirPath = "%s/%s" % (MainDir, SampleType)
+
 	os.mkdir( SubDirPath )
 	os.chdir( SubDirPath )
 
 	cmd_cp = "cp %s ./" % (cwd+"/"+CodeName)
 	os.system( cmd_cp )
 
-	Flag_IsSignal = 1
-	if "ZZto4L" in SampleType: Flag_IsSignal = 0
 	cmd_ROOT = '.x %s++("%s", "%s", %d)' % (CodeName, SamplePath, SampleType, Flag_IsSignal)
 
 	f_temp = open(ScriptName, "w");
@@ -91,9 +59,10 @@ echo "finished"
 	""" % cmd_ROOT)
 	f_temp.close()
 
-	cmd_cd = "cd %s" % SubDirPath
+	cmd_cd = "cd %s" % SampleType
 	cmd_script = "source %s >&../log_%s&" % (ScriptName, SampleType)
-	cmd_cd_backToCWD = 'cd %s' % cwd
+	# cmd_cd_backToCWD = 'cd %s' % cwd
+	cmd_cd_backToCWD = 'cd ..'
 
 	f.write( "%s\n" % cmd_cd )
 	f.write( "%s\n" % cmd_script )
@@ -104,4 +73,7 @@ echo "finished"
 f.write('echo "Submission is finished"\n\n')
 f.close()
 
-print "Working directory is made: %s" % MainDir
+print "+" * 100
+print "Run all jobs:"
+print "cd %s; source Run.sh;" % MainDir
+print "+" * 100
