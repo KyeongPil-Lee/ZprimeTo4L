@@ -1,0 +1,9 @@
+set nb_core 20
+#set nb_core 40
+
+launch
+	order=NLO
+	shower=ON
+	done #determine which operations are executed: NLO, fixed order ...
+	done #whether edit the cards or not
+
