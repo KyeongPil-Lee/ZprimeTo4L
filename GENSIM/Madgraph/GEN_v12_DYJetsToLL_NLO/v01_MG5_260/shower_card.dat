@@ -121,7 +121,7 @@ njmax      = 0        # Maximal multiplicity in the merging
 extralibs = pythia8 boost_iostreams z dl stdc++ # Extra-libraries (not LHAPDF) 
                                  # Default: "stdhep Fmcfio"
                                  # PYTHIA > 8.200 may require library dl
-extrapaths = ../lib /home/kplee/Physics/Madgraph/MG5_aMC_v2_5_5/HEPTools/pythia8//lib /home/kplee/Physics/Madgraph/MG5_aMC_v2_5_5/HEPTools/boost/lib /home/kplee/Physics/Madgraph/MG5_aMC_v2_5_5/HEPTools/zlib/lib # Path to the extra-libraries
+extrapaths = ../lib /home/kplee/Physics/Madgraph/MG5_aMC_v2_6_0/HEPTools/pythia8//lib /home/kplee/Physics/Madgraph/MG5_aMC_v2_6_0/HEPTools/boost/lib /home/kplee/Physics/Madgraph/MG5_aMC_v2_6_0/HEPTools/zlib/lib # Path to the extra-libraries
                                  # Default: "../lib"
 INCLUDEPATHS =                   # Path to header files needed by c++
                                  # Dir names separated by white spaces
