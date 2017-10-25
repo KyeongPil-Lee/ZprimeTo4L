@@ -2,7 +2,7 @@
 
 date
 
-export KP_MADGRAPH_PATH=/home/kplee/Physics/Madgraph/MG5_aMC_v2_5_5
+export KP_MADGRAPH_PATH=/home/kplee/Physics/Madgraph/MG5_aMC_v2_6_0
 
 $KP_MADGRAPH_PATH/bin/mg5_aMC proc_card.dat
 
