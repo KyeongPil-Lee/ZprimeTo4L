@@ -1,4 +1,4 @@
-set nb_core 20
+set nb_core 10
 #set nb_core 40
 
 launch
