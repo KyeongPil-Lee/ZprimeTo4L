@@ -1,0 +1,24 @@
+#import model loop_sm-ckm_no_b_mass
+#switch to diagonal ckm matrix if needed for speed
+
+# import model loop_sm-no_b_mass # -- model sm does not allow to generate loop corrections of type ['QCD'] -- //
+
+# -- LO -- #
+import model sm
+
+define p = p b b~
+define j = j b b~
+
+#define ell+ = e+ mu+ ta+
+#define ell- = e- mu- ta-
+
+define l+ = e+ mu+
+define l- = e- mu-
+
+# generate p p > l+ l- l+ l- [QCD] @0
+# add process p p > l+ l- l+ l- j [QCD] @1
+
+# -- LO -- #
+generate p p > l+ l- l+ l-
+
+output Local/MG5_Output -nojpeg # -- 5f = 5 flavors of quarks in a proton -- #
