@@ -1,0 +1,128 @@
+set automatic_html_opening False
+set nb_core 30
+
+generate_events
+	shower=PYTHIA8
+	set MZp 200
+	set WZp Auto
+	set Msn3 50
+	set Wsn3 Auto
+	set nevents 1000
+	set dynamical_scale_choice 4
+	set cut_decays True
+	set pta 0
+	set ptj 20
+	set ptl 15
+	set etal 2.5
+	set etaa 0
+	set etaj 5.
+	set draa 0
+	set draj 0
+	set dral 0
+	set drll 0
+
+
+generate_events
+	shower=PYTHIA8
+	set MZp 800
+	set WZp Auto
+	set Msn3 50
+	set Wsn3 Auto
+	set nevents 1000
+	set dynamical_scale_choice 4
+	set cut_decays True
+	set pta 0
+	set ptj 20
+	set ptl 15
+	set etal 2.5
+	set etaa 0
+	set etaj 5.
+	set draa 0
+	set draj 0
+	set dral 0
+	set drll 0
+
+
+generate_events
+	shower=PYTHIA8
+	set MZp 1000
+	set WZp Auto
+	set Msn3 50
+	set Wsn3 Auto
+	set nevents 1000
+	set dynamical_scale_choice 4
+	set cut_decays True
+	set pta 0
+	set ptj 20
+	set ptl 15
+	set etal 2.5
+	set etaa 0
+	set etaj 5.
+	set draa 0
+	set draj 0
+	set dral 0
+	set drll 0
+
+
+generate_events
+	shower=PYTHIA8
+	set MZp 2000
+	set WZp Auto
+	set Msn3 50
+	set Wsn3 Auto
+	set nevents 1000
+	set dynamical_scale_choice 4
+	set cut_decays True
+	set pta 0
+	set ptj 20
+	set ptl 15
+	set etal 2.5
+	set etaa 0
+	set etaj 5.
+	set draa 0
+	set draj 0
+	set dral 0
+	set drll 0
+
+
+generate_events
+	shower=PYTHIA8
+	set MZp 3000
+	set WZp Auto
+	set Msn3 50
+	set Wsn3 Auto
+	set nevents 1000
+	set dynamical_scale_choice 4
+	set cut_decays True
+	set pta 0
+	set ptj 20
+	set ptl 15
+	set etal 2.5
+	set etaa 0
+	set etaj 5.
+	set draa 0
+	set draj 0
+	set dral 0
+	set drll 0
+
+
+generate_events
+	shower=PYTHIA8
+	set MZp 4000
+	set WZp Auto
+	set Msn3 50
+	set Wsn3 Auto
+	set nevents 1000
+	set dynamical_scale_choice 4
+	set cut_decays True
+	set pta 0
+	set ptj 20
+	set ptl 15
+	set etal 2.5
+	set etaa 0
+	set etaj 5.
+	set draa 0
+	set draj 0
+	set dral 0
+	set drll 0
+
