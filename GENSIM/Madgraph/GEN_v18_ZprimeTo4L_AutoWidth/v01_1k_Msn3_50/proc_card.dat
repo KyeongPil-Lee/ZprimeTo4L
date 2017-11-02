@@ -14,4 +14,4 @@ define vl = ve vm vt
 define vl~ = ve~ vm~ vt~
 import model Zprime_B-3Ltau_Rev_UFO/
 generate p p > zp , ( zp > sn3 sn3~ , sn3 > l+ l- , sn3~ > l+ l- )
-output MG5_Output
+output Local/MG5_Output -nojpeg
