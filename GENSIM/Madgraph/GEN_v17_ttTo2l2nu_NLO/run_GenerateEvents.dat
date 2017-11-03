@@ -1,5 +1,5 @@
-set nb_core 10
-#set nb_core 40
+#set nb_core 10
+set nb_core 30
 
 launch
 	order=NLO
