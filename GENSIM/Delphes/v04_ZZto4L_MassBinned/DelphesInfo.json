@@ -1,0 +1,14 @@
+{
+	"InputPathBase": "$KP_ANALYZER_PATH/GENSIM/Madgraph",
+	"OutputPath": "/home/kplee/data7/Zprime4LSamples/v20170911_1st_DiffSeed_Width",
+	"DelphesExe": "$KP_DELPHES_PATH/DelphesHepMC",
+	"DelphesCard": "/home/kplee/Physics/ZprimeTo4L/GENSIM/Delphes/v03_ZprimeTo4L_DiffSeed_Width/delphes_card_CMS_NoUniqueFinder.tcl",
+
+	"SampleInfo": [
+		{
+			"Name": "ZZto4L_M3500to4500_mmnlmax",
+			"Path": "GEN_v11_ZZto4L_HighMass4l_LO/v16_M3500to4500_mmnlmax/Local/MG5_Output/run_01/tag_1_pythia8_events.hepmc.gz"
+		}
+	]
+
+}
