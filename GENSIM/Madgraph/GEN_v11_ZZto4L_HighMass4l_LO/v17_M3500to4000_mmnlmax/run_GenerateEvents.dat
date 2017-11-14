@@ -1,0 +1,7 @@
+set automatic_html_opening False
+set nb_core 30
+#set nb_core 15
+
+generate_events
+	shower=PYTHIA8
+
