@@ -1,3 +1,8 @@
+Bool_t CompareJet( Jet* Object1, Jet* Object2 )
+{
+	return Object1->PT > Object2->PT;
+}
+
 Bool_t CompareGenParticle( GenParticle* Object1, GenParticle* Object2 )
 {
 	return Object1->PT > Object2->PT;
@@ -241,6 +246,19 @@ public:
 		this->Calc_Var();
 	}
 
+	Bool_t TestAcc(Double_t leadPtCut, Double_t subPtCut, Double_t leadEtaCut, Double_t subEtaCut )
+	{
+		Bool_t flag = kFALSE;
+
+		if( this->First->Pt > leadPtCut &&
+			this->Second->Pt > subPtCut && 
+			fabs(this->First->Eta) < leadEtaCut &&
+			fabs(this->Second->Eta) < subEtaCut )
+			flag = kTRUE;
+
+		return flag;
+	}
+
 	void Calc_Var()
 	{
 		TLorentzVector LVec_First = First->LVec_P;
@@ -263,6 +281,11 @@ public:
 		this->GENPair_postFSR = new MyGenPair( GenLepton1, GenLepton2 );
 	}
 };
+
+Bool_t CompareMyLeptonPair( MyLeptonPair* lepPair1, MyLeptonPair* lepPair2 )
+{
+	return lepPair1->M > lepPair2->M;
+}
 
 class My4LeptonPair
 {
@@ -395,6 +418,63 @@ public:
 Bool_t Compare4LeptonPair( My4LeptonPair *pair1, My4LeptonPair *pair2 )
 {
 	return pair1->M > pair2->M;
+}
+
+class MyJetPair
+{
+public:
+	Jet *First;
+	Jet *Second;
+
+	Double_t M;
+	Double_t Pt;
+	Double_t Rap;
+	TLorentzVector LVec_P;
+
+	MyJetPair( Jet* jet1, Jet* jet2 )
+	{
+		if( jet1->PT > jet2->PT )
+		{
+			this->First = jet1;
+			this->Second = jet2;
+		}
+		else
+		{
+			this->First = jet2;
+			this->Second = jet1;
+		}
+
+		this->Calc_Var();
+	}
+
+	Bool_t TestAcc(Double_t leadPtCut, Double_t subPtCut, Double_t leadEtaCut, Double_t subEtaCut )
+	{
+		Bool_t flag = kFALSE;
+
+		if( this->First->PT > leadPtCut &&
+			this->Second->PT > subPtCut && 
+			fabs(this->First->Eta) < leadEtaCut &&
+			fabs(this->Second->Eta) < subEtaCut )
+			flag = kTRUE;
+
+		return flag;
+	}
+
+	void Calc_Var()
+	{
+		TLorentzVector LVec_First = First->P4();
+		TLorentzVector LVec_Second = Second->P4();
+		this->LVec_P = LVec_First + LVec_Second;
+
+		this->M = this->LVec_P.M();
+		this->Pt = this->LVec_P.Pt();
+		this->Rap = this->LVec_P.Rapidity();
+	}
+};
+
+Bool_t CompareMyJetPair( MyJetPair* jetPair1, MyJetPair* jetPair2 )
+{
+	return jetPair1->M > jetPair2->M;
 }
 
 class MyMuonPair
